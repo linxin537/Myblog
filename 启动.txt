@@ -1,0 +1,12 @@
+● 前端启动命令：
+
+  cd C:\Mywebsite_2\frontend
+  npm run dev
+
+
+● 后端启动命令：
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8003
+
+
+deepseek
+sk-93d4658c77bd4b22a51d62c2fd996e82

@@ -87,35 +87,65 @@ onMounted(() => {
 </script>
 
 <template>
-  <div style="max-width: 800px; margin: 0 auto; padding-top: 24px;">
-    <!-- 搜索和筛选栏 -->
-    <div class="glass" style="padding: 16px 20px; margin-bottom: 24px;">
-      <NSpace vertical :size="12" style="width: 100%;">
+  <div style="margin: -32px;">
+
+    <!-- Aurora Hero -->
+    <div class="aurora-animated" style="padding: 96px 32px 80px; text-align: center; position: relative; overflow: hidden;">
+      <!-- 顶部光晕 -->
+      <div style="position: absolute; top: -60%; left: -20%; width: 140%; height: 200%; background: radial-gradient(ellipse at center, rgba(45,212,191,0.06) 0%, transparent 60%); pointer-events: none;" />
+
+      <h1 class="aurora-title-in" style="font-family: 'Fraunces', 'Noto Serif SC', serif; font-size: 56px; font-weight: 600; line-height: 1.12; letter-spacing: -0.8px; margin: 0 0 20px; background: linear-gradient(135deg, var(--aurora-teal) 0%, var(--aurora-purple) 45%, var(--aurora-pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        用文字记录思考
+      </h1>
+      <p class="aurora-title-in-delayed" style="font-size: 20px; line-height: 1.5; color: var(--text-secondary); margin: 0 auto 48px; max-width: 480px; font-weight: 400;">
+        分享技术见解与日常感悟
+      </p>
+
+      <!-- 搜索 — 极光玻璃风格 -->
+      <div class="aurora-title-in-delayed-2" style="max-width: 500px; margin: 0 auto;">
         <NInput
           v-model:value="searchKeyword"
           placeholder="搜索文章..."
           clearable
           round
           size="large"
+          class="glass-input"
+          :style="{
+            '--n-border': '1px solid var(--border-glow)',
+            '--n-color': 'var(--bg-glass)',
+            '--n-color-focus': 'var(--bg-card-hover)',
+            '--n-text-color': 'var(--text-primary)',
+            '--n-placeholder-color': 'var(--text-tertiary)',
+            '--n-height': '52px',
+            '--n-font-size': '16px',
+            '--n-border-radius': '980px',
+            '--n-box-shadow-focus': 'var(--glow-teal)',
+          }"
         >
           <template #prefix>
             <NIcon :component="Search" />
           </template>
         </NInput>
-        <NSpace>
+      </div>
+    </div>
+
+    <!-- 筛选栏 + 列表 -->
+    <div style="max-width: 780px; margin: 0 auto; padding: 0 32px 64px;">
+      <div class="glass" style="padding: 14px 20px; margin-bottom: 28px;">
+        <NSpace :size="12" style="width: 100%;">
           <NSelect
             v-model:value="selectedCategory"
             :options="categories.map(c => ({ label: c.name, value: c.id }))"
             placeholder="分类筛选"
             clearable
-            style="width: 160px;"
+            style="width: 150px;"
           />
           <NSelect
             v-model:value="selectedTag"
             :options="tags.map(t => ({ label: t.name, value: t.id }))"
             placeholder="标签筛选"
             clearable
-            style="width: 160px;"
+            style="width: 150px;"
           />
           <NButton text @click="clearFilters">清除筛选</NButton>
           <div style="flex: 1;" />
@@ -123,46 +153,44 @@ onMounted(() => {
             写文章
           </NButton>
         </NSpace>
-      </NSpace>
-    </div>
-
-    <!-- 文章列表 -->
-    <template v-if="initialLoading">
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-        <ArticleCardSkeleton v-for="i in 3" :key="i" />
-      </div>
-    </template>
-
-    <NSpin v-else :show="loading">
-      <div v-if="!loading && articles.length === 0" style="padding: 80px 0;">
-        <NEmpty description="还没有文章">
-          <template #extra>
-            <NButton v-if="auth.isAuthor" type="primary" @click="router.push('/editor')">
-              写第一篇文章
-            </NButton>
-          </template>
-        </NEmpty>
       </div>
 
-      <div v-else style="display: flex; flex-direction: column; gap: 16px;">
-        <div
-          v-for="article in articles"
-          :key="article.id"
-          @click="router.push(`/article/${article.id}`)"
-        >
-          <ArticleCard :article="article" />
+      <template v-if="initialLoading">
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <ArticleCardSkeleton v-for="i in 3" :key="i" />
         </div>
-      </div>
-    </NSpin>
+      </template>
 
-    <!-- 分页 -->
-    <div v-if="total > pageSize" style="display: flex; justify-content: center; margin-top: 32px;">
-      <NPagination
-        :page="page"
-        :page-size="pageSize"
-        :item-count="total"
-        @update:page="onPageChange"
-      />
+      <NSpin v-else :show="loading">
+        <div v-if="!loading && articles.length === 0" style="padding: 80px 0;">
+          <NEmpty description="还没有文章">
+            <template #extra>
+              <NButton v-if="auth.isAuthor" type="primary" @click="router.push('/editor')">
+                写第一篇文章
+              </NButton>
+            </template>
+          </NEmpty>
+        </div>
+
+        <div v-else style="display: flex; flex-direction: column; gap: 20px;">
+          <div
+            v-for="article in articles"
+            :key="article.id"
+            @click="router.push(`/article/${article.id}`)"
+          >
+            <ArticleCard :article="article" />
+          </div>
+        </div>
+      </NSpin>
+
+      <div v-if="total > pageSize" style="display: flex; justify-content: center; margin-top: 40px;">
+        <NPagination
+          :page="page"
+          :page-size="pageSize"
+          :item-count="total"
+          @update:page="onPageChange"
+        />
+      </div>
     </div>
   </div>
 </template>

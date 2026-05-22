@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="glass" style="padding: 20px; border-radius: 12px; margin-bottom: 16px;">
+  <div class="glass-aurora" style="padding: 24px; margin-bottom: 0; border-radius: 16px;">
     <div style="display: flex; gap: 16px;">
       <div class="skeleton-pulse" style="width: 200px; height: 120px; flex-shrink: 0; border-radius: 8px;" />
       <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">

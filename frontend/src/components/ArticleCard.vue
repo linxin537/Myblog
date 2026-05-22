@@ -10,9 +10,9 @@ function formatDate(d: string) {
 </script>
 
 <template>
-  <div class="article-card glass scale-in" style="padding: 24px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;">
-    <div v-if="article.cover_image" style="margin: -24px -24px 16px -24px; border-radius: 16px 16px 0 0; overflow: hidden; max-height: 200px;">
-      <img :src="article.cover_image" style="width: 100%; height: 200px; object-fit: cover;" alt="" />
+  <div class="glass-aurora scale-in" style="padding: 24px; cursor: pointer;">
+    <div v-if="article.cover_image" style="margin: -24px -24px 20px -24px; border-radius: 15px 15px 0 0; overflow: hidden; max-height: 220px;">
+      <img :src="article.cover_image" style="width: 100%; height: 220px; object-fit: cover; transition: transform 0.5s ease;" alt="" />
     </div>
 
     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
@@ -50,8 +50,7 @@ function formatDate(d: string) {
 </template>
 
 <style scoped>
-.article-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+.glass-aurora:hover img {
+  transform: scale(1.03);
 }
 </style>

@@ -3,7 +3,7 @@ import { ref, watchEffect } from 'vue'
 import { NConfigProvider, NMessageProvider, NDialogProvider, darkTheme, type GlobalThemeOverrides } from 'naive-ui'
 import AppLayout from './components/AppLayout.vue'
 
-const isDark = ref(false)
+const isDark = ref(true)
 
 watchEffect(() => {
   document.documentElement.setAttribute('data-theme', isDark.value ? 'dark' : 'light')
@@ -11,21 +11,27 @@ watchEffect(() => {
 
 const lightThemeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#6C9BF2',
-    primaryColorHover: '#8BB4FF',
-    primaryColorPressed: '#5A88E0',
+    primaryColor: '#0d9488',
+    primaryColorHover: '#14b8a6',
+    primaryColorPressed: '#0f766e',
     borderRadius: '12px',
-    fontFamily: '"Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif',
+    fontFamily: '"DM Sans", "Fraunces", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif',
+  },
+  Button: {
+    borderRadiusMedium: '980px',
   },
 }
 
 const darkThemeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#6C9BF2',
-    primaryColorHover: '#8BB4FF',
-    primaryColorPressed: '#5A88E0',
+    primaryColor: '#2dd4bf',
+    primaryColorHover: '#5eeadb',
+    primaryColorPressed: '#14b8a6',
     borderRadius: '12px',
-    fontFamily: '"Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif',
+    fontFamily: '"DM Sans", "Fraunces", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif',
+  },
+  Button: {
+    borderRadiusMedium: '980px',
   },
 }
 </script>
