@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python *)",
+      "PowerShell(pip install *)",
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "PowerShell(New-Item *)",
+      "Bash(pip --version)",
+      "Bash(pip install *)",
+      "Bash(npx vue-tsc *)",
+      "Bash(mysql *)",
+      "Bash(curl -s http://127.0.0.1:8000/api/v1/health)",
+      "Bash(taskkill /F /IM uvicorn.exe)",
+      "Bash(npm run *)",
+      "Bash(C:\\\\Python314\\\\python.exe *)",
+      "PowerShell(& \"C:\\\\Python314\\\\python.exe\" --version)",
+      "PowerShell(& \"C:\\\\Python314\\\\python.exe\" -m pip install -r \"C:\\\\Mywebsite_2\\\\backend\\\\requirements.txt\" -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn)",
+      "PowerShell(& \"C:\\\\ProgramData\\\\anaconda3\\\\python.exe\" --version)",
+      "Bash(\"C:\\\\ProgramData\\\\anaconda3\\\\python.exe\" -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000)",
+      "PowerShell(Get-NetTCPConnection *)",
+      "PowerShell(netstat *)",
+      "PowerShell(Stop-Process *)",
+      "Bash(taskkill *)",
+      "Bash(tasklist *)",
+      "Bash(curl *)",
+      "Bash(\"C:\\\\ProgramData\\\\anaconda3\\\\python.exe\" -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8001)",
+      "Bash(netstat -ano)",
+      "Bash(findstr \":8001\")",
+      "Bash('C:\\\\ProgramData\\\\anaconda3\\\\python.exe' -c ' *)",
+      "Bash(\"C:\\\\ProgramData\\\\anaconda3\\\\python.exe\" -m uvicorn app.main:app --host 127.0.0.1 --port 8002)",
+      "Bash(\"C:\\\\ProgramData\\\\anaconda3\\\\python.exe\" -m uvicorn app.main:app --reload --reload-engine stat --host 127.0.0.1 --port 8001)",
+      "Bash(C:\\\\ProgramData\\\\anaconda3\\\\python.exe *)",
+      "Bash(\"C:\\\\ProgramData\\\\anaconda3\\\\python.exe\" -m uvicorn app.main:app --host 127.0.0.1 --port 8001)",
+      "Bash(findstr \"LISTENING\")",
+      "Bash(\"C:\\\\ProgramData\\\\anaconda3\\\\python.exe\" -m uvicorn app.main:app --host 127.0.0.1 --port 8003)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}
