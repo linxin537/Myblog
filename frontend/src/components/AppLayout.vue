@@ -12,6 +12,9 @@ const auth = useAuthStore()
 const adminOptions = [
   { label: '分类管理', key: 'categories' },
   { label: '标签管理', key: 'tags' },
+  { label: '用户管理', key: 'users' },
+  { type: 'divider' as const, key: 'd1' },
+  { label: '审计日志', key: 'audit-logs' },
 ]
 
 function handleAdminSelect(key: string) {
@@ -35,7 +38,9 @@ async function handleLogout() {
           Blog
         </NText>
         <NButton text @click="router.push('/')">首页</NButton>
-        <NButton v-if="auth.isAuthor" text @click="router.push('/dashboard')">创作</NButton>
+        <NButton v-if="auth.isAuthor" text @click="router.push('/editor')">创作</NButton>
+        <NButton v-if="auth.isAuthor" text @click="router.push('/drafts')">草稿</NButton>
+        <NButton v-if="auth.isLoggedIn" text @click="router.push('/favorites')">收藏</NButton>
         <NDropdown v-if="auth.isAdmin" :options="adminOptions" @select="handleAdminSelect">
             <NButton text>管理</NButton>
           </NDropdown>

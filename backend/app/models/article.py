@@ -10,6 +10,22 @@ article_tags = Table(
     Column("tag_id", ForeignKey("tags.id"), primary_key=True),
 )
 
+article_likes = Table(
+    "article_likes",
+    Base.metadata,
+    Column("user_id", ForeignKey("users.id"), primary_key=True),
+    Column("article_id", ForeignKey("articles.id"), primary_key=True),
+    Column("created_at", DateTime, default=datetime.utcnow, nullable=False),
+)
+
+article_favorites = Table(
+    "article_favorites",
+    Base.metadata,
+    Column("user_id", ForeignKey("users.id"), primary_key=True),
+    Column("article_id", ForeignKey("articles.id"), primary_key=True),
+    Column("created_at", DateTime, default=datetime.utcnow, nullable=False),
+)
+
 class Article(Base):
     __tablename__ = "articles"
 

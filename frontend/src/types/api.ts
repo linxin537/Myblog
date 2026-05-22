@@ -45,6 +45,10 @@ export interface ArticleInfo {
   is_pinned: boolean
   published_at: string | null
   created_at: string
+  like_count: number
+  favorite_count: number
+  is_liked: boolean
+  is_favorited: boolean
   author: UserInfo | null
   category: CategoryInfo | null
   tags: TagInfo[]
@@ -54,6 +58,12 @@ export interface ArticleDetail extends ArticleInfo {
   content: string
   html_content: string | null
   updated_at: string | null
+}
+
+export interface ToggleResponse {
+  liked?: boolean
+  favorited?: boolean
+  count: number
 }
 
 export interface ArticleForm {
@@ -93,6 +103,24 @@ export interface TagInfo {
 
 export interface TagForm {
   name: string
+}
+
+// 评论
+export interface CommentInfo {
+  id: number
+  content: string
+  article_id: number
+  user_id: number
+  parent_id: number | null
+  created_at: string
+  updated_at: string | null
+  user: UserInfo | null
+  replies: CommentInfo[]
+}
+
+export interface CommentForm {
+  content: string
+  parent_id?: number | null
 }
 
 // 文件

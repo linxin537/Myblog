@@ -1,11 +1,26 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { NButton, NTag, NText, NSpace, NSpin, NResult, NPopconfirm, useMessage } from 'naive-ui'
 import { marked } from 'marked'
+import hljs from 'highlight.js'
+import DOMPurify from 'dompurify'
 import { getArticle, deleteArticle } from '../api/articles'
 import { useAuthStore } from '../stores/auth'
+import CommentSection from '../components/CommentSection.vue'
+import LikeButton from '../components/LikeButton.vue'
+import FavoriteButton from '../components/FavoriteButton.vue'
+import TableOfContents from '../components/TableOfContents.vue'
 import type { ArticleDetail as ArticleDetailType } from '../types/api'
+
+marked.setOptions({
+  highlight(code: string, lang: string) {
+    if (lang && hljs.getLanguage(lang)) {
+      return hljs.highlight(code, { language: lang }).value
+    }
+    return hljs.highlightAuto(code).value
+  },
+})
 
 const route = useRoute()
 const router = useRouter()
@@ -14,14 +29,33 @@ const auth = useAuthStore()
 
 const article = ref<ArticleDetailType | null>(null)
 const loading = ref(true)
+const likeCount = ref(0)
+const isLiked = ref(false)
+const favoriteCount = ref(0)
+const isFavorited = ref(false)
+const tocHeadings = ref<{ id: string; text: string; level: number }[]>([])
 
 const canEdit = () => {
   if (!auth.user || !article.value) return false
   return auth.isAdmin || auth.user.id === article.value.author_id
 }
 
+function extractHeadings(content: string) {
+  const headings: { id: string; text: string; level: number }[] = []
+  const tokens = marked.lexer(content)
+  for (const token of tokens) {
+    if (token.type === 'heading' && token.depth <= 3) {
+      const text = token.tokens?.filter(t => t.type === 'text').map(t => t.text).join('') || ''
+      const id = text.toLowerCase().replace(/[^\w一-鿿]+/g, '-').replace(/(^-|-$)/g, '')
+      headings.push({ id: id || `heading-${headings.length}`, text, level: token.depth })
+    }
+  }
+  return headings
+}
+
 function renderMarkdown(content: string) {
-  return marked(content, { breaks: true, gfm: true })
+  const raw = marked(content, { breaks: true, gfm: true, headerIds: true }) as string
+  return DOMPurify.sanitize(raw)
 }
 
 async function loadArticle() {
@@ -31,6 +65,12 @@ async function loadArticle() {
     const { data } = await getArticle(id)
     if (data.code === 0 && data.data) {
       article.value = data.data as ArticleDetailType
+      isLiked.value = data.data.is_liked
+      likeCount.value = data.data.like_count
+      isFavorited.value = data.data.is_favorited
+      favoriteCount.value = data.data.favorite_count
+      tocHeadings.value = extractHeadings(data.data.content)
+      await nextTick()
     }
   } finally {
     loading.value = false
@@ -69,7 +109,11 @@ onMounted(loadArticle)
         </template>
       </NResult>
 
-      <article v-else-if="article">
+      <article v-else-if="article" style="display: flex; gap: 40px; position: relative;">
+        <!-- 目录侧边栏 -->
+        <TableOfContents :headings="tocHeadings" />
+
+        <div style="flex: 1; min-width: 0;">
         <!-- 封面图 -->
         <div
           v-if="article.cover_image"
@@ -104,6 +148,20 @@ onMounted(loadArticle)
           <NText depth="3" style="font-size: 13px;">
             {{ article.view_count }} 次阅读
           </NText>
+          <LikeButton
+            :article-id="article.id"
+            :initial-liked="isLiked"
+            :initial-count="likeCount"
+            @update:liked="(v: boolean) => isLiked = v"
+            @update:count="(v: number) => likeCount = v"
+          />
+          <FavoriteButton
+            :article-id="article.id"
+            :initial-favorited="isFavorited"
+            :initial-count="favoriteCount"
+            @update:favorited="(v: boolean) => isFavorited = v"
+            @update:count="(v: number) => favoriteCount = v"
+          />
         </NSpace>
 
         <!-- 标签 -->
@@ -142,6 +200,12 @@ onMounted(loadArticle)
               确定要删除这篇文章吗？
             </NPopconfirm>
           </NSpace>
+        </div>
+
+        <!-- 评论区 -->
+        <div style="margin-top: 48px; border-top: 1px solid var(--border-glass); padding-top: 32px;">
+          <CommentSection :article-id="article.id" />
+        </div>
         </div>
       </article>
     </NSpin>

@@ -29,7 +29,12 @@ class ArticleResponse(ArticleBase):
     published_at: datetime | None
     created_at: datetime
     updated_at: datetime | None
-    
+
+    like_count: int = 0
+    favorite_count: int = 0
+    is_liked: bool = False
+    is_favorited: bool = False
+
     author: UserResponse | None = None
     category: CategoryResponse | None = None
     tags: list[TagResponse] = []
@@ -47,6 +52,11 @@ class ArticleListResponse(BaseModel):
     is_pinned: bool
     published_at: datetime | None
     created_at: datetime
+
+    like_count: int = 0
+    favorite_count: int = 0
+    is_liked: bool = False
+    is_favorited: bool = False
 
     author: UserResponse | None = None
     category: CategoryResponse | None = None

@@ -20,7 +20,7 @@ const router = useRouter()
 const message = useMessage()
 const dialog = useDialog()
 const auth = useAuthStore()
-const { loadDraft, saveDraft, clearDraft, hasDraft } = useDraftSave()
+const { loadDraft, saveDraft, flushDraft, clearDraft, hasDraft } = useDraftSave()
 
 const articleId = route.params.id ? Number(route.params.id) : null
 const isEditing = !!articleId
@@ -81,11 +81,17 @@ function getDraftData() {
   }
 }
 
+onBeforeUnmount(() => {
+  flushDraft(getDraftData())
+})
+
 // 自动保存
 watch([title, content, summary, coverImage, categoryId, tagIds, isDraft, isPinned], () => {
   if (title.value || content.value) {
-    saveDraft(getDraftData())
     lastSaved.value = '保存中...'
+    saveDraft(getDraftData(), () => {
+      lastSaved.value = '已保存'
+    })
   }
 }, { deep: true })
 

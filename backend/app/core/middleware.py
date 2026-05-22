@@ -2,7 +2,6 @@ import time
 from collections import defaultdict
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
-from app.core.errors import AppError
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):

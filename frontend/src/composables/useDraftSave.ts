@@ -26,11 +26,20 @@ export function useDraftSave() {
     }
   }
 
-  function saveDraft(data: Omit<DraftData, 'saved_at'>) {
+  function saveDraft(data: Omit<DraftData, 'saved_at'>, onSaved?: () => void) {
     if (debounceTimer) clearTimeout(debounceTimer)
     debounceTimer = setTimeout(() => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...data, saved_at: Date.now() }))
+      onSaved?.()
     }, DEBOUNCE_MS)
+  }
+
+  function flushDraft(data: Omit<DraftData, 'saved_at'>) {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer)
+      debounceTimer = null
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...data, saved_at: Date.now() }))
   }
 
   function clearDraft() {
@@ -42,5 +51,5 @@ export function useDraftSave() {
     return !!localStorage.getItem(STORAGE_KEY)
   }
 
-  return { loadDraft, saveDraft, clearDraft, hasDraft }
+  return { loadDraft, saveDraft, flushDraft, clearDraft, hasDraft }
 }

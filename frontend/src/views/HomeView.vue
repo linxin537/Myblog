@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { NInput, NSelect, NPagination, NButton, NSpin, NEmpty, NSpace, NTag, NText } from 'naive-ui'
 import { Search } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 import ArticleCard from '../components/ArticleCard.vue'
+import ArticleCardSkeleton from '../components/ArticleCardSkeleton.vue'
 import { useAuthStore } from '../stores/auth'
 import { getArticles } from '../api/articles'
 import { getCategories } from '../api/categories'
@@ -12,12 +13,14 @@ import { getTags } from '../api/tags'
 import type { ArticleInfo, CategoryInfo, TagInfo } from '../types/api'
 
 const router = useRouter()
+const route = useRoute()
 const auth = useAuthStore()
 
 const articles = ref<ArticleInfo[]>([])
 const categories = ref<CategoryInfo[]>([])
 const tags = ref<TagInfo[]>([])
 const loading = ref(false)
+const initialLoading = ref(true)
 const total = ref(0)
 const page = ref(1)
 const pageSize = 10
@@ -44,6 +47,7 @@ async function loadArticles() {
     }
   } finally {
     loading.value = false
+    initialLoading.value = false
   }
 }
 
@@ -74,6 +78,9 @@ watch(searchKeyword, () => {
 })
 
 onMounted(() => {
+  if (route.query.tag_id) {
+    selectedTag.value = Number(route.query.tag_id)
+  }
   loadFilters()
   loadArticles()
 })
@@ -120,7 +127,13 @@ onMounted(() => {
     </div>
 
     <!-- 文章列表 -->
-    <NSpin :show="loading">
+    <template v-if="initialLoading">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <ArticleCardSkeleton v-for="i in 3" :key="i" />
+      </div>
+    </template>
+
+    <NSpin v-else :show="loading">
       <div v-if="!loading && articles.length === 0" style="padding: 80px 0;">
         <NEmpty description="还没有文章">
           <template #extra>

@@ -11,6 +11,17 @@ const router = createRouter({
       meta: { guest: true },
     },
     {
+      path: '/favorites',
+      name: 'favorites',
+      component: () => import('../views/FavoritesView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/user/:username',
+      name: 'user-profile',
+      component: () => import('../views/ProfileView.vue'),
+    },
+    {
       path: '/',
       name: 'home',
       component: () => import('../views/HomeView.vue'),
@@ -39,15 +50,33 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['admin'] },
     },
     {
+      path: '/admin/users',
+      name: 'user-manage',
+      component: () => import('../views/admin/UserManage.vue'),
+      meta: { requiresAuth: true, roles: ['admin'] },
+    },
+    {
+      path: '/admin/audit-logs',
+      name: 'audit-logs',
+      component: () => import('../views/admin/AuditLogs.vue'),
+      meta: { requiresAuth: true, roles: ['admin'] },
+    },
+    {
       path: '/admin',
       name: 'admin',
       component: () => import('../views/admin/CategoryManage.vue'),
       meta: { requiresAuth: true, roles: ['admin'] },
     },
     {
+      path: '/drafts',
+      name: 'drafts',
+      component: () => import('../views/DraftsView.vue'),
+      meta: { requiresAuth: true, roles: ['author', 'admin'] },
+    },
+    {
       path: '/settings',
       name: 'settings',
-      component: () => import('../views/HomeView.vue'),
+      component: () => import('../views/SettingsView.vue'),
       meta: { requiresAuth: true },
     },
   ],

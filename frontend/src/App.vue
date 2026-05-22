@@ -35,7 +35,11 @@ const darkThemeOverrides: GlobalThemeOverrides = {
     <NMessageProvider>
       <NDialogProvider>
         <AppLayout v-model:dark="isDark">
-          <RouterView />
+          <RouterView v-slot="{ Component }">
+            <Transition name="page" mode="out-in">
+              <component :is="Component" />
+            </Transition>
+          </RouterView>
         </AppLayout>
       </NDialogProvider>
     </NMessageProvider>

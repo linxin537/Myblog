@@ -5,7 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.user import User, UserRole
 from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, RefreshRequest, UserResponse
-from app.schemas.common import ApiResponse, success_response
+from app.schemas.common import ApiResponse, success_response, error_response
+from app.schemas.password import ChangePasswordRequest
+from app.services import log_action
 from app.core.security import (
     hash_password, verify_password, create_access_token, create_refresh_token,
     decode_token, is_locked, record_login_failure, reset_login_attempts,
@@ -14,6 +16,7 @@ from app.core.errors import (
     UsernameExistsError, EmailExistsError, LoginError, AccountLockedError,
     UnauthorizedError, ValidationError,
 )
+from app.api.deps import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["认证"])
 
@@ -46,7 +49,7 @@ async def register(req: RegisterRequest, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/login")
-async def login(req: LoginRequest, response: Response, db: AsyncSession = Depends(get_db)):
+async def login(req: LoginRequest, request: Request, response: Response, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(User).where(User.username == req.username))
     user = result.scalar_one_or_none()
 
@@ -62,6 +65,7 @@ async def login(req: LoginRequest, response: Response, db: AsyncSession = Depend
         raise LoginError()
 
     reset_login_attempts(user)
+    await log_action(db, action="login", user_id=user.id, target_type="user", target_id=user.id, request=request)
 
     access_token = create_access_token(user.id, user.role.value)
     refresh_token = create_refresh_token(user.id, remember_me=req.remember_me)
@@ -109,3 +113,25 @@ async def logout(response: Response):
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")
     return success_response(message="已登出")
+
+
+@router.put("/password")
+async def change_password(
+    req: ChangePasswordRequest,
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    if not verify_password(req.old_password, current_user.hashed_password):
+        return error_response(2003, "旧密码不正确")
+
+    if len(req.new_password) < 8:
+        return error_response(1001, "新密码长度至少 8 位")
+
+    current_user.hashed_password = hash_password(req.new_password)
+    await db.flush()
+
+    await log_action(db, action="change_password", user_id=current_user.id,
+                     target_type="user", target_id=current_user.id, request=request)
+
+    return success_response(message="密码修改成功")

@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { Editor } from '@bytemd/vue-next'
+import gfm from '@bytemd/plugin-gfm'
+import highlight from '@bytemd/plugin-highlight'
+import frontmatter from '@bytemd/plugin-frontmatter'
+import mediumZoom from '@bytemd/plugin-medium-zoom'
 import 'bytemd/dist/index.css'
+import 'highlight.js/styles/github.css'
+import 'highlight.js/styles/github-dark.css' with { media: '(prefers-color-scheme: dark)' }
 
 const modelValue = defineModel<string>('modelValue', { default: '' })
 
@@ -11,6 +17,8 @@ interface UploadResult {
 const props = defineProps<{
   uploadFn?: (file: File) => Promise<UploadResult>
 }>()
+
+const plugins = [gfm(), highlight(), frontmatter(), mediumZoom()]
 
 async function handleUploadImages(files: File[]) {
   if (!props.uploadFn) return []
@@ -31,7 +39,7 @@ async function handleUploadImages(files: File[]) {
   <div class="markdown-editor">
     <Editor
       :value="modelValue"
-      :plugins="[]"
+      :plugins="plugins"
       :upload-images="handleUploadImages"
       locale="zh_Hans"
       @change="(v: string) => modelValue = v"

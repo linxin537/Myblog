@@ -12,7 +12,10 @@ from app.api.v1.categories import router as categories_router
 from app.api.v1.tags import router as tags_router
 from app.api.v1.articles import router as articles_router
 from app.api.v1.files import router as files_router
+from app.api.v1.comments import router as comments_router
+from app.api.v1.admin import router as admin_router
 from app.core.errors import AppError
+from app.core.middleware import RateLimitMiddleware
 from app.schemas.common import error_response
 import os
 
@@ -42,6 +45,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.add_middleware(RateLimitMiddleware, requests_per_minute=120)
+
 static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
@@ -51,6 +56,8 @@ app.include_router(categories_router, prefix="/api/v1")
 app.include_router(tags_router, prefix="/api/v1")
 app.include_router(articles_router, prefix="/api/v1")
 app.include_router(files_router, prefix="/api/v1")
+app.include_router(comments_router, prefix="/api/v1")
+app.include_router(admin_router, prefix="/api/v1")
 
 
 @app.exception_handler(AppError)
