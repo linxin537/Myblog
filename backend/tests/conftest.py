@@ -23,14 +23,12 @@ from app.main import app
 
 @pytest.fixture(scope="session")
 def engine():
-    """Session-scoped async SQLite engine, tables created once."""
     e = create_async_engine(os.environ["DATABASE_URL"], echo=False)
     return e
 
 
 @pytest.fixture(scope="session")
 async def create_tables(engine):
-    """Create all tables once per session."""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
@@ -41,19 +39,31 @@ async def create_tables(engine):
 
 @pytest.fixture
 async def db_session(engine, create_tables):
-    """Per-test DB session with rollback."""
+    """Per-test DB session."""
     session_factory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with session_factory() as session:
-        async with session.begin():
-            yield session
-            await session.rollback()
+        yield session
+
+
+@pytest.fixture(autouse=True)
+async def clean_db(engine):
+    """Truncate all tables between tests for isolation."""
+    yield
+    async with engine.begin() as conn:
+        for table in reversed(Base.metadata.sorted_tables):
+            await conn.execute(table.delete())
 
 
 @pytest.fixture
 async def client(db_session: AsyncSession):
-    """Async HTTP client with overridden DB dependency."""
+    """Async HTTP client with overridden DB dependency that mimics production get_db."""
     async def override_get_db():
-        yield db_session
+        try:
+            yield db_session
+            await db_session.commit()
+        except Exception:
+            await db_session.rollback()
+            raise
 
     app.dependency_overrides[get_db] = override_get_db
     transport = ASGITransport(app=app)

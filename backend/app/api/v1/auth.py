@@ -56,6 +56,7 @@ async def login(req: LoginRequest, request: Request, response: Response, db: Asy
     if not user or not verify_password(req.password, user.hashed_password):
         if user:
             user.login_attempts, user.locked_until = record_login_failure(user)
+            await db.commit()
         raise LoginError()
 
     if is_locked(user):
