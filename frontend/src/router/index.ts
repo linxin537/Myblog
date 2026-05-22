@@ -16,15 +16,32 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
     },
     {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: () => import('../views/HomeView.vue'),
+      path: '/article/:id',
+      name: 'article-detail',
+      component: () => import('../views/ArticleDetail.vue'),
+    },
+    {
+      path: '/editor/:id?',
+      name: 'editor',
+      component: () => import('../views/ArticleEditor.vue'),
       meta: { requiresAuth: true, roles: ['author', 'admin'] },
+    },
+    {
+      path: '/admin/categories',
+      name: 'categories-manage',
+      component: () => import('../views/admin/CategoryManage.vue'),
+      meta: { requiresAuth: true, roles: ['admin'] },
+    },
+    {
+      path: '/admin/tags',
+      name: 'tags-manage',
+      component: () => import('../views/admin/TagManage.vue'),
+      meta: { requiresAuth: true, roles: ['admin'] },
     },
     {
       path: '/admin',
       name: 'admin',
-      component: () => import('../views/HomeView.vue'),
+      component: () => import('../views/admin/CategoryManage.vue'),
       meta: { requiresAuth: true, roles: ['admin'] },
     },
     {

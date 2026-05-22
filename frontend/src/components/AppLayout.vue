@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NLayout, NLayoutHeader, NLayoutContent, NButton, NSpace, NText } from 'naive-ui'
+import { NLayout, NLayoutHeader, NLayoutContent, NButton, NSpace, NText, NDropdown } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { Moon, Sunny } from '@vicons/ionicons5'
@@ -8,6 +8,15 @@ import { NIcon } from 'naive-ui'
 const dark = defineModel<boolean>('dark', { default: false })
 const router = useRouter()
 const auth = useAuthStore()
+
+const adminOptions = [
+  { label: '分类管理', key: 'categories' },
+  { label: '标签管理', key: 'tags' },
+]
+
+function handleAdminSelect(key: string) {
+  router.push(`/admin/${key}`)
+}
 
 async function handleLogout() {
   await auth.logout()
@@ -27,7 +36,9 @@ async function handleLogout() {
         </NText>
         <NButton text @click="router.push('/')">首页</NButton>
         <NButton v-if="auth.isAuthor" text @click="router.push('/dashboard')">创作</NButton>
-        <NButton v-if="auth.isAdmin" text @click="router.push('/admin')">管理</NButton>
+        <NDropdown v-if="auth.isAdmin" :options="adminOptions" @select="handleAdminSelect">
+            <NButton text>管理</NButton>
+          </NDropdown>
       </NSpace>
 
       <NSpace align="center" :size="12">

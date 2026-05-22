@@ -8,6 +8,10 @@ from app.database import engine, Base
 from app.models import User  # noqa: F401
 from app.api.v1.auth import router as auth_router
 from app.api.v1.users import router as users_router
+from app.api.v1.categories import router as categories_router
+from app.api.v1.tags import router as tags_router
+from app.api.v1.articles import router as articles_router
+from app.api.v1.files import router as files_router
 from app.core.errors import AppError
 from app.schemas.common import error_response
 import os
@@ -43,6 +47,10 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(users_router, prefix="/api/v1")
+app.include_router(categories_router, prefix="/api/v1")
+app.include_router(tags_router, prefix="/api/v1")
+app.include_router(articles_router, prefix="/api/v1")
+app.include_router(files_router, prefix="/api/v1")
 
 
 @app.exception_handler(AppError)
