@@ -45,7 +45,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(RateLimitMiddleware, requests_per_minute=120)
+if not os.environ.get("TESTING"):
+    app.add_middleware(RateLimitMiddleware, requests_per_minute=120)
 
 static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 app.mount("/static", StaticFiles(directory=static_dir), name="static")

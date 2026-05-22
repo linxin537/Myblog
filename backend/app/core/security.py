@@ -1,9 +1,13 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 import bcrypt
 from app.config import get_settings
 
 settings = get_settings()
+
+
+def _utcnow() -> datetime:
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 MAX_LOGIN_ATTEMPTS = 5
 LOCKOUT_MINUTES = 15
@@ -18,7 +22,7 @@ def verify_password(plain: str, hashed: str) -> bool:
 
 
 def create_access_token(user_id: int, role: str) -> str:
-    expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = _utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {
         "sub": str(user_id),
         "role": role,
@@ -30,7 +34,7 @@ def create_access_token(user_id: int, role: str) -> str:
 
 def create_refresh_token(user_id: int, remember_me: bool = False) -> str:
     days = 30 if remember_me else settings.REFRESH_TOKEN_EXPIRE_DAYS
-    expire = datetime.utcnow() + timedelta(days=days)
+    expire = _utcnow() + timedelta(days=days)
     payload = {
         "sub": str(user_id),
         "type": "refresh",
@@ -48,18 +52,17 @@ def decode_token(token: str) -> dict | None:
 
 
 def is_locked(user) -> bool:
-    if user.locked_until and user.locked_until > datetime.utcnow():
-        return True
-    if user.login_attempts >= MAX_LOGIN_ATTEMPTS:
-        return True
-    return False
+    now = _utcnow()
+    if user.locked_until:
+        return user.locked_until > now
+    return user.login_attempts >= MAX_LOGIN_ATTEMPTS
 
 
 def record_login_failure(user) -> tuple[int, datetime | None]:
     attempts = user.login_attempts + 1
     locked_until = None
     if attempts >= MAX_LOGIN_ATTEMPTS:
-        locked_until = datetime.utcnow() + timedelta(minutes=LOCKOUT_MINUTES)
+        locked_until = _utcnow() + timedelta(minutes=LOCKOUT_MINUTES)
     return attempts, locked_until
 
 
