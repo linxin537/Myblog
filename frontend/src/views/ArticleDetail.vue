@@ -117,20 +117,20 @@ onMounted(loadArticle)
         <!-- 封面图 -->
         <div
           v-if="article.cover_image"
-          class="glass"
-          style="margin-bottom: 24px; padding: 0; overflow: hidden; border-radius: 16px; max-height: 400px;"
+          class="glass-aurora"
+          style="margin-bottom: 28px; padding: 0; overflow: hidden; border-radius: 16px; max-height: 420px;"
         >
           <img
             :src="article.cover_image"
-            style="width: 100%; height: 400px; object-fit: cover; display: block;"
+            style="width: 100%; height: 420px; object-fit: cover; display: block;"
             alt=""
           />
         </div>
 
         <!-- 标题 -->
-        <NText tag="h1" style="font-size: 32px; font-weight: 800; margin-bottom: 16px; line-height: 1.3;">
+        <h1 style="font-family: 'Fraunces', 'Noto Serif SC', serif; font-size: 40px; font-weight: 600; margin: 0 0 20px; line-height: 1.18; letter-spacing: -0.5px; color: var(--text-primary);">
           {{ article.title }}
-        </NText>
+        </h1>
 
         <!-- 元信息 -->
         <NSpace align="center" style="margin-bottom: 24px; flex-wrap: wrap;">
@@ -213,16 +213,16 @@ onMounted(loadArticle)
 </template>
 
 <style>
-.article-content h1 { font-size: 28px; margin: 24px 0 12px; }
-.article-content h2 { font-size: 24px; margin: 20px 0 10px; }
-.article-content h3 { font-size: 20px; margin: 16px 0 8px; }
-.article-content p { margin-bottom: 16px; }
-.article-content img { max-width: 100%; border-radius: 8px; margin: 12px 0; }
-.article-content pre { background: rgba(0,0,0,0.05); border-radius: 8px; padding: 16px; overflow-x: auto; margin: 16px 0; }
-.article-content code { font-family: 'JetBrains Mono', monospace; font-size: 14px; }
-.article-content blockquote { border-left: 3px solid var(--accent); padding-left: 16px; margin: 16px 0; color: var(--text-secondary); }
-.article-content table { width: 100%; border-collapse: collapse; margin: 16px 0; }
-.article-content th, .article-content td { border: 1px solid var(--border-glass); padding: 8px 12px; text-align: left; }
-.article-content th { background: rgba(0,0,0,0.03); }
-.article-content a { color: var(--accent); }
+.article-content h1 { font-family: 'Fraunces', 'Noto Serif SC', serif; font-size: 30px; font-weight: 600; margin: 32px 0 14px; letter-spacing: -0.3px; }
+.article-content h2 { font-family: 'Fraunces', 'Noto Serif SC', serif; font-size: 24px; font-weight: 600; margin: 28px 0 12px; letter-spacing: -0.2px; }
+.article-content h3 { font-size: 20px; font-weight: 600; margin: 20px 0 10px; }
+.article-content p { margin-bottom: 18px; line-height: 1.8; }
+.article-content img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
+.article-content pre { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 10px; padding: 20px; overflow-x: auto; margin: 20px 0; }
+.article-content code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 14px; }
+.article-content blockquote { border-left: 3px solid var(--aurora-teal); padding-left: 18px; margin: 20px 0; color: var(--text-secondary); font-style: italic; }
+.article-content table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+.article-content th, .article-content td { border: 1px solid var(--border-glass); padding: 10px 14px; text-align: left; }
+.article-content th { background: var(--bg-glass); font-weight: 600; }
+.article-content a { color: var(--aurora-teal); }
 </style>

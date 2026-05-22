@@ -76,34 +76,36 @@ onBeforeUnmount(() => {
   align-self: flex-start;
   max-height: calc(100vh - 140px);
   overflow-y: auto;
-  padding: 16px;
-  border-radius: 12px;
-  background: rgba(128, 128, 128, 0.04);
+  padding: 18px;
+  border-radius: 14px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .toc-link {
   display: block;
-  padding: 5px 0;
+  padding: 5px 0 5px 10px;
   font-size: 13px;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary);
   text-decoration: none;
   border-left: 2px solid transparent;
-  padding-left: 8px;
-  transition: color 0.2s, border-color 0.2s;
+  transition: color 0.25s ease, border-color 0.25s ease;
   cursor: pointer;
-  line-height: 1.4;
+  line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .toc-link:hover {
-  color: var(--accent, #5b8c5a);
+  color: var(--aurora-teal);
 }
 
 .toc-active {
-  color: var(--accent, #5b8c5a);
-  border-left-color: var(--accent, #5b8c5a);
+  color: var(--aurora-teal);
+  border-left-color: var(--aurora-teal);
   font-weight: 600;
 }
 
