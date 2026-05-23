@@ -1,7 +1,6 @@
-// frontend/src/composables/useScrollReveal.ts
+import { onMounted, onBeforeUnmount } from 'vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { onBeforeUnmount } from 'vue'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -17,6 +16,8 @@ export function useScrollReveal(
   target: string | Element | Element[],
   options: ScrollRevealOptions = {}
 ) {
+  if (typeof window === 'undefined') return
+
   const {
     y = 30,
     duration = 0.6,
@@ -25,34 +26,30 @@ export function useScrollReveal(
     start = 'top 85%',
   } = options
 
-  const ctx = gsap.context(() => {
-    const els = typeof target === 'string'
-      ? document.querySelectorAll(target)
-      : Array.isArray(target) ? target : [target]
+  let ctx: gsap.Context | undefined
 
-    if (!els || els.length === 0) return
-
-    gsap.fromTo(
-      els as Element[],
-      { opacity: 0, y },
-      {
-        opacity: 1,
-        y: 0,
-        duration,
-        stagger,
-        ease,
-        scrollTrigger: {
-          trigger: Array.isArray(target) || typeof target === 'string' ? (els[0] as Element) : target as Element,
-          start,
-          toggleActions: 'play none none none',
-        },
-      }
-    )
+  onMounted(() => {
+    ctx = gsap.context(() => {
+      gsap.fromTo(
+        target,
+        { opacity: 0, y },
+        {
+          opacity: 1,
+          y: 0,
+          duration,
+          stagger,
+          ease,
+          scrollTrigger: {
+            trigger: Array.isArray(target) ? target[0] : target as Element,
+            start,
+            toggleActions: 'play none none none',
+          },
+        }
+      )
+    })
   })
 
   onBeforeUnmount(() => {
-    ctx.revert()
+    ctx?.revert()
   })
-
-  return ctx
 }
