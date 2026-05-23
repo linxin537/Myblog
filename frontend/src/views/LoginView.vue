@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useMessage, NForm, NFormItem, NInput, NButton, NCheckbox, NTabs, NTabPane, NH2 } from 'naive-ui'
+import { useMessage, NForm, NFormItem, NInput, NButton, NCheckbox } from 'naive-ui'
 import type { FormInst, FormRules } from 'naive-ui'
-import GlassCard from '../components/GlassCard.vue'
 import { useAuthStore } from '../stores/auth'
 import { getErrorMessage } from '../api/client'
 
@@ -117,59 +116,111 @@ async function handleRegister() {
 </script>
 
 <template>
-  <div style="display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 160px);">
-    <GlassCard style="width: 420px; max-width: 90vw;">
-      <NH2 style="text-align: center; margin-bottom: 24px;">
-        {{ isLogin ? '登录' : '注册' }}
-      </NH2>
+  <div style="max-width: 360px; margin: 0 auto; padding: 80px 0;">
+    <!-- 标题 -->
+    <div style="font-size: 24px; font-weight: 700; color: var(--n-text-color); margin-bottom: 8px;">
+      {{ isLogin ? '登录' : '注册' }}
+    </div>
+    <!-- 副标题 -->
+    <div style="font-size: 14px; color: var(--n-text-color-3); margin-bottom: 32px;">
+      {{ isLogin ? '欢迎回来，请登录你的账户' : '创建新账户，开始你的旅程' }}
+    </div>
 
-      <NTabs v-model:value="activeTab" type="segment" animated style="margin-bottom: 24px;">
-        <NTabPane name="login" tab="登录" />
-        <NTabPane name="register" tab="注册" />
-      </NTabs>
+    <!-- 登录表单 -->
+    <template v-if="isLogin">
+      <NForm ref="loginRef" :model="loginForm" :rules="loginRules" label-placement="top">
+        <NFormItem label="用户名" path="username">
+          <NInput
+            v-model:value="loginForm.username"
+            placeholder="请输入用户名"
+            size="large"
+            :style="{ '--n-border-radius': '8px' }"
+          />
+        </NFormItem>
+        <NFormItem label="密码" path="password">
+          <NInput
+            v-model:value="loginForm.password"
+            type="password"
+            placeholder="请输入密码"
+            show-password-on="click"
+            size="large"
+            :style="{ '--n-border-radius': '8px' }"
+          />
+        </NFormItem>
+        <NFormItem>
+          <NCheckbox v-model:checked="loginForm.rememberMe">记住我</NCheckbox>
+        </NFormItem>
+        <NButton
+          type="primary"
+          block
+          size="large"
+          :loading="loading"
+          :disabled="lockCountdown > 0"
+          :style="{ borderRadius: '8px', height: '48px' }"
+          @click="handleLogin"
+        >
+          {{ lockText || '登录' }}
+        </NButton>
+      </NForm>
+    </template>
 
-      <template v-if="isLogin">
-        <NForm ref="loginRef" :model="loginForm" :rules="loginRules" label-placement="left">
-          <NFormItem label="用户名" path="username">
-            <NInput v-model:value="loginForm.username" placeholder="请输入用户名" />
-          </NFormItem>
-          <NFormItem label="密码" path="password">
-            <NInput v-model:value="loginForm.password" type="password" placeholder="请输入密码" show-password-on="click" />
-          </NFormItem>
-          <NFormItem>
-            <NCheckbox v-model:checked="loginForm.rememberMe">记住我</NCheckbox>
-          </NFormItem>
-          <NButton
-            type="primary"
-            block
-            :loading="loading"
-            :disabled="lockCountdown > 0"
-            @click="handleLogin"
-          >
-            {{ lockText || '登录' }}
-          </NButton>
-        </NForm>
-      </template>
+    <!-- 注册表单 -->
+    <template v-else>
+      <NForm ref="registerRef" :model="registerForm" :rules="registerRules" label-placement="top">
+        <NFormItem label="用户名" path="username">
+          <NInput
+            v-model:value="registerForm.username"
+            placeholder="请输入用户名"
+            size="large"
+            :style="{ '--n-border-radius': '8px' }"
+          />
+        </NFormItem>
+        <NFormItem label="邮箱" path="email">
+          <NInput
+            v-model:value="registerForm.email"
+            placeholder="请输入邮箱"
+            size="large"
+            :style="{ '--n-border-radius': '8px' }"
+          />
+        </NFormItem>
+        <NFormItem label="密码" path="password">
+          <NInput
+            v-model:value="registerForm.password"
+            type="password"
+            placeholder="至少8位，含字母和数字"
+            show-password-on="click"
+            size="large"
+            :style="{ '--n-border-radius': '8px' }"
+          />
+        </NFormItem>
+        <NFormItem label="确认密码" path="confirmPassword">
+          <NInput
+            v-model:value="registerForm.confirmPassword"
+            type="password"
+            placeholder="再次输入密码"
+            show-password-on="click"
+            size="large"
+            :style="{ '--n-border-radius': '8px' }"
+          />
+        </NFormItem>
+        <NButton
+          type="primary"
+          block
+          size="large"
+          :loading="loading"
+          :style="{ borderRadius: '8px', height: '48px' }"
+          @click="handleRegister"
+        >
+          注册
+        </NButton>
+      </NForm>
+    </template>
 
-      <template v-else>
-        <NForm ref="registerRef" :model="registerForm" :rules="registerRules" label-placement="left">
-          <NFormItem label="用户名" path="username">
-            <NInput v-model:value="registerForm.username" placeholder="请输入用户名" />
-          </NFormItem>
-          <NFormItem label="邮箱" path="email">
-            <NInput v-model:value="registerForm.email" placeholder="请输入邮箱" />
-          </NFormItem>
-          <NFormItem label="密码" path="password">
-            <NInput v-model:value="registerForm.password" type="password" placeholder="至少8位，含字母和数字" show-password-on="click" />
-          </NFormItem>
-          <NFormItem label="确认密码" path="confirmPassword">
-            <NInput v-model:value="registerForm.confirmPassword" type="password" placeholder="再次输入密码" show-password-on="click" />
-          </NFormItem>
-          <NButton type="primary" block :loading="loading" @click="handleRegister">
-            注册
-          </NButton>
-        </NForm>
-      </template>
-    </GlassCard>
+    <!-- 切换登录/注册 -->
+    <div style="text-align: center; margin-top: 16px;">
+      <NButton text type="primary" @click="activeTab = isLogin ? 'register' : 'login'">
+        {{ isLogin ? '还没有账户？注册' : '已有账户？登录' }}
+      </NButton>
+    </div>
   </div>
 </template>
