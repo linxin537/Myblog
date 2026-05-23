@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { NInput, NSelect, NPagination, NButton, NSpin, NEmpty, NSpace } from 'naive-ui'
 import { Search } from '@vicons/ionicons5'
@@ -11,6 +11,7 @@ import { getArticles } from '../api/articles'
 import { getCategories } from '../api/categories'
 import { getTags } from '../api/tags'
 import type { ArticleInfo, CategoryInfo, TagInfo } from '../types/api'
+import gsap from 'gsap'
 
 const router = useRouter()
 const route = useRoute()
@@ -77,19 +78,65 @@ watch(searchKeyword, () => {
   loadArticles()
 })
 
+let heroCtx: gsap.Context | undefined
+
 onMounted(() => {
+  // Hero entrance animation
+  heroCtx = gsap.context(() => {
+    const tl = gsap.timeline()
+    tl.fromTo('.hero-title', { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: 'elastic.out(1, 0.5)' })
+    tl.fromTo('.hero-subtitle', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+    tl.fromTo('.hero-search', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' }, '-=0.1')
+  })
+
   if (route.query.tag_id) {
     selectedTag.value = Number(route.query.tag_id)
   }
   loadFilters()
   loadArticles()
 })
+
+onBeforeUnmount(() => {
+  heroCtx?.revert()
+})
+
+function handleCardMouseMove(e: MouseEvent) {
+  const card = (e.currentTarget as HTMLElement).querySelector('.card-wrapper') as HTMLElement
+  if (!card) return
+  const rect = card.getBoundingClientRect()
+  const x = (e.clientX - rect.left) / rect.width - 0.5
+  const y = (e.clientY - rect.top) / rect.height - 0.5
+  gsap.to(card, {
+    rotateX: -y * 8,
+    rotateY: x * 8,
+    transformPerspective: 600,
+    duration: 0.4,
+    ease: 'power2.out',
+  })
+  const glow = card.querySelector('.card-glow') as HTMLElement
+  if (glow) {
+    glow.style.background = `radial-gradient(circle at ${(x + 0.5) * 100}% ${(y + 0.5) * 100}%, rgba(255,56,92,0.08), transparent 60%)`
+  }
+}
+
+function handleCardMouseLeave(e: MouseEvent) {
+  const card = (e.currentTarget as HTMLElement).querySelector('.card-wrapper') as HTMLElement
+  if (!card) return
+  gsap.to(card, {
+    rotateX: 0,
+    rotateY: 0,
+    duration: 0.4,
+    ease: 'back.out(1.5)',
+  })
+  const glow = card.querySelector('.card-glow') as HTMLElement
+  if (glow) glow.style.background = 'transparent'
+}
 </script>
 
 <template>
     <!-- Hero -->
     <div :style="{ textAlign: 'center', padding: '80px 32px 64px' }">
-      <h1 :style="{
+      <h1 class="hero-title" :style="{
         fontSize: '28px',
         fontWeight: 700,
         lineHeight: 1.43,
@@ -99,7 +146,7 @@ onMounted(() => {
       }">
         用文字记录思考
       </h1>
-      <p :style="{
+      <p class="hero-subtitle" :style="{
         fontSize: '16px',
         color: 'var(--color-muted)',
         margin: '0 auto 32px',
@@ -109,7 +156,7 @@ onMounted(() => {
       </p>
 
       <!-- Search Pill -->
-      <div :style="{ maxWidth: '500px', margin: '0 auto' }">
+      <div class="hero-search" :style="{ maxWidth: '500px', margin: '0 auto' }">
         <NInput
           v-model:value="searchKeyword"
           placeholder="搜索文章..."
@@ -188,9 +235,15 @@ onMounted(() => {
           <div
             v-for="article in articles"
             :key="article.id"
+            style="perspective: 600px;"
             @click="router.push(`/article/${article.id}`)"
+            @mousemove="handleCardMouseMove"
+            @mouseleave="handleCardMouseLeave"
           >
-            <ArticleCard :article="article" />
+            <div class="card-wrapper" style="position: relative; border-radius: 14px; overflow: hidden;">
+              <div class="card-glow" style="position: absolute; inset: 0; pointer-events: none; z-index: 1; transition: background 0.3s ease;" />
+              <ArticleCard :article="article" />
+            </div>
           </div>
         </div>
       </NSpin>
