@@ -217,6 +217,11 @@ async function handleRegister() {
         >
           {{ lockText || '登录' }}
         </NButton>
+        <div :style="{ textAlign: 'right', marginTop: '8px' }">
+          <NButton text :style="{ fontSize: '13px', color: 'var(--color-muted)' }" @click="router.push('/reset-password')">
+            忘记密码？
+          </NButton>
+        </div>
       </NForm>
     </template>
 

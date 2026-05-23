@@ -24,3 +24,11 @@ export function getMe() {
 export function updateMe(data: { avatar?: string; bio?: string }) {
   return client.put<ApiResponse<UserInfo>>('/users/me', data)
 }
+
+export function forgotPassword(email: string) {
+  return client.post<ApiResponse>('/auth/forgot-password', { email })
+}
+
+export function resetPassword(token: string, newPassword: string) {
+  return client.post<ApiResponse>('/auth/reset-password', { token, new_password: newPassword })
+}

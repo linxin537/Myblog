@@ -11,6 +11,12 @@ const router = createRouter({
       meta: { guest: true },
     },
     {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: () => import('../views/ResetPassword.vue'),
+      meta: { guest: true },
+    },
+    {
       path: '/favorites',
       name: 'favorites',
       component: () => import('../views/FavoritesView.vue'),
