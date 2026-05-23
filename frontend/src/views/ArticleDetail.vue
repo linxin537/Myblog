@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { NButton, NTag, NSpace, NSpin, NResult, NPopconfirm, useMessage } from 'naive-ui'
 import { marked } from 'marked'
@@ -13,15 +13,29 @@ import FavoriteButton from '../components/FavoriteButton.vue'
 import TableOfContents from '../components/TableOfContents.vue'
 import type { ArticleDetail as ArticleDetailType } from '../types/api'
 import { getIdenticonUrl } from '../utils/identicon'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-marked.setOptions({
-  highlight(code: string, lang: string) {
-    if (lang && hljs.getLanguage(lang)) {
-      return hljs.highlight(code, { language: lang }).value
-    }
-    return hljs.highlightAuto(code).value
-  },
-})
+gsap.registerPlugin(ScrollTrigger)
+
+// marked v18: use extension API for code highlighting
+try {
+  marked.use({
+    renderer: {
+      code({ text, lang }: { text: string; lang?: string }) {
+        const language = lang && hljs.getLanguage(lang) ? lang : 'plaintext'
+        try {
+          const highlighted = hljs.highlight(text, { language }).value
+          return `<pre><code class="hljs language-${lang || ''}">${highlighted}</code></pre>`
+        } catch {
+          return `<pre><code>${text}</code></pre>`
+        }
+      },
+    },
+  })
+} catch {
+  // ignore if extension API not available
+}
 
 const route = useRoute()
 const router = useRouter()
@@ -35,6 +49,7 @@ const isLiked = ref(false)
 const favoriteCount = ref(0)
 const isFavorited = ref(false)
 const tocHeadings = ref<{ id: string; text: string; level: number }[]>([])
+const progressPercent = ref(0)
 
 const canEdit = () => {
   if (!auth.user || !article.value) return false
@@ -46,7 +61,10 @@ function extractHeadings(content: string) {
   const tokens = marked.lexer(content)
   for (const token of tokens) {
     if (token.type === 'heading' && token.depth <= 3) {
-      const text = token.tokens?.filter(t => t.type === 'text').map(t => t.text).join('') || ''
+      const text = (token as any).text || (token as any).tokens
+        ?.filter((t: any) => t.type === 'text')
+        .map((t: any) => t.text)
+        .join('') || ''
       const id = text.toLowerCase().replace(/[^\w一-鿿]+/g, '-').replace(/(^-|-$)/g, '')
       headings.push({ id: id || `heading-${headings.length}`, text, level: token.depth })
     }
@@ -55,7 +73,7 @@ function extractHeadings(content: string) {
 }
 
 function renderMarkdown(content: string) {
-  const raw = marked(content, { breaks: true, gfm: true, headerIds: true }) as string
+  const raw = marked(content, { breaks: true, gfm: true }) as string
   return DOMPurify.sanitize(raw)
 }
 
@@ -93,10 +111,65 @@ function formatDate(d: string) {
   return new Date(d).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
-onMounted(loadArticle)
+const likeParticles = ref<Array<{ id: number; x: number; y: number }>>([])
+let likeParticleId = 0
+
+function spawnLikeParticles(event: MouseEvent) {
+  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  const cx = rect.left + rect.width / 2
+  const cy = rect.top + rect.height / 2
+  for (let i = 0; i < 10; i++) {
+    const id = ++likeParticleId
+    const angle = (Math.PI * 2 * i) / 10
+    const distance = 30 + Math.random() * 20
+    likeParticles.value.push({ id, x: cx + Math.cos(angle) * distance, y: cy + Math.sin(angle) * distance })
+    setTimeout(() => {
+      likeParticles.value = likeParticles.value.filter(p => p.id !== id)
+    }, 800)
+  }
+}
+
+let progressCtx: gsap.Context | undefined
+
+onMounted(() => {
+  loadArticle()
+  progressCtx = gsap.context(() => {
+    ScrollTrigger.create({
+      trigger: '.article-content',
+      start: 'top bottom',
+      end: 'bottom bottom',
+      onUpdate: (self) => {
+        progressPercent.value = Math.round(self.progress * 100)
+      },
+    })
+  })
+})
+
+onBeforeUnmount(() => {
+  progressCtx?.revert()
+})
+
+watch(() => route.params.id, () => {
+  if (route.name === 'article-detail') {
+    loadArticle()
+  }
+})
 </script>
 
 <template>
+  <!-- Reading progress bar -->
+  <div
+    :style="{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      height: '2px',
+      width: `${progressPercent}%`,
+      background: 'var(--color-primary)',
+      zIndex: 200,
+      transition: 'width 0.1s linear',
+    }"
+  />
   <div :style="{ display: 'flex', gap: '32px', maxWidth: '1080px', margin: '0 auto', paddingTop: '24px' }">
     <NSpin :show="loading" style="width: 100%">
       <NResult
@@ -113,25 +186,6 @@ onMounted(loadArticle)
       <div v-else-if="article" :style="{ display: 'flex', gap: '32px', width: '100%' }">
         <!-- 左栏：文章主体 -->
         <div :style="{ flex: '1 1 0%', minWidth: 0 }">
-          <!-- 封面图 -->
-          <div
-            v-if="article.cover_image"
-            :style="{
-              marginBottom: '28px',
-              padding: '0',
-              overflow: 'hidden',
-              borderRadius: '16px',
-              maxHeight: '420px',
-              border: '1px solid var(--color-hairline-soft)',
-            }"
-          >
-            <img
-              :src="article.cover_image"
-              style="width: 100%; height: 420px; object-fit: cover; display: block;"
-              alt=""
-            />
-          </div>
-
           <!-- 标题 -->
           <h1 style="font-family: 'Fraunces', 'Noto Serif SC', serif; font-size: 40px; font-weight: 600; margin: 0 0 20px; line-height: 1.18; letter-spacing: -0.5px; color: var(--color-ink);">
             {{ article.title }}
@@ -221,13 +275,32 @@ onMounted(loadArticle)
             <TableOfContents :headings="tocHeadings" />
             <div :style="{ height: '1px', background: 'var(--color-hairline-soft)', margin: '16px 0' }" />
             <NSpace vertical>
-              <LikeButton
-                :article-id="article.id"
-                :initial-liked="isLiked"
-                :initial-count="likeCount"
-                @update:liked="(v: boolean) => isLiked = v"
-                @update:count="(v: number) => likeCount = v"
-              />
+              <div style="position: relative;" @click="spawnLikeParticles">
+                <LikeButton
+                  :article-id="article.id"
+                  :initial-liked="isLiked"
+                  :initial-count="likeCount"
+                  @update:liked="(v: boolean) => isLiked = v"
+                  @update:count="(v: number) => likeCount = v"
+                />
+                <!-- Like particles -->
+                <div
+                  v-for="p in likeParticles"
+                  :key="p.id"
+                  :style="{
+                    position: 'fixed',
+                    left: `${p.x}px`,
+                    top: `${p.y}px`,
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: 'var(--color-primary)',
+                    pointerEvents: 'none',
+                    zIndex: 9999,
+                    animation: 'like-particle 0.8s ease-out forwards',
+                  }"
+                />
+              </div>
               <FavoriteButton
                 :article-id="article.id"
                 :initial-favorited="isFavorited"
@@ -256,4 +329,9 @@ onMounted(loadArticle)
 .article-content th, .article-content td { border: 1px solid var(--color-hairline-soft); padding: 10px 14px; text-align: left; }
 .article-content th { background: var(--color-surface-soft); font-weight: 600; }
 .article-content a { color: var(--color-primary); }
+
+@keyframes like-particle {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+}
 </style>
