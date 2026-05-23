@@ -37,9 +37,9 @@ onMounted(load)
 </script>
 
 <template>
-  <div style="max-width: 800px; margin: 0 auto; padding-top: 24px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
-      <NText tag="h2" style="font-size: 24px; font-weight: 700;">草稿管理</NText>
+  <div :style="{ maxWidth: '820px', margin: '0 auto', paddingTop: '24px' }">
+    <div :style="{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }">
+      <NText tag="h2" :style="{ fontSize: '24px', fontWeight: 700 }">草稿管理</NText>
       <NButton type="primary" @click="router.push('/editor')">新建文章</NButton>
     </div>
 
@@ -49,16 +49,50 @@ onMounted(load)
           <NButton type="primary" @click="router.push('/editor')">开始写作</NButton>
         </template>
       </NEmpty>
-      <div v-else>
-        <div v-for="article in articles" :key="article.id" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-          <div style="flex: 1;">
+      <div
+        v-else
+        :style="{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }"
+      >
+        <div
+          v-for="article in articles"
+          :key="article.id"
+          :style="{
+            position: 'relative',
+            border: '1px solid var(--color-hairline-soft)',
+            borderRadius: 'var(--radius-md)',
+            overflow: 'hidden',
+          }"
+        >
+          <div @click="router.push(`/editor/${article.id}`)">
             <ArticleCard :article="article" />
           </div>
-          <div style="display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
-            <NButton size="small" @click="router.push(`/editor/${article.id}`)">编辑</NButton>
+          <!-- Draft action overlay -->
+          <div
+            :style="{
+              position: 'absolute',
+              top: '8px',
+              right: '8px',
+              display: 'flex',
+              gap: '6px',
+            }"
+          >
+            <NButton
+              size="tiny"
+              :style="{ '--n-border-radius': '6px' }"
+              @click="router.push(`/editor/${article.id}`)"
+            >
+              编辑
+            </NButton>
             <NPopconfirm @positive-click="() => handleDelete(article.id)">
               <template #trigger>
-                <NButton size="small" type="error" secondary>删除</NButton>
+                <NButton
+                  size="tiny"
+                  type="error"
+                  secondary
+                  :style="{ '--n-border-radius': '6px' }"
+                >
+                  删除
+                </NButton>
               </template>
               确定删除这个草稿？
             </NPopconfirm>
