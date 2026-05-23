@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { NButton, NInput, NText, NSpace, NPagination, NEmpty, useMessage } from 'naive-ui'
+import { getIdenticonUrl } from '../utils/identicon'
 import { getComments, createComment } from '../api/comments'
 import { useAuthStore } from '../stores/auth'
 import CommentItem from './CommentItem.vue'
@@ -78,23 +79,34 @@ onMounted(loadComments)
     </NText>
 
     <!-- 评论输入框 -->
-    <div v-if="auth.isLoggedIn" style="margin-bottom: 24px;">
-      <div v-if="replyTo" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-        <NText depth="3" style="font-size: 13px;">回复 @{{ replyTo.user?.username }}：</NText>
-        <NButton size="tiny" text @click="cancelReply">取消</NButton>
-      </div>
-      <NInput
-        v-model:value="newContent"
-        type="textarea"
-        :placeholder="replyTo ? '写下你的回复...' : '写下你的评论...'"
-        :autosize="{ minRows: 3, maxRows: 8 }"
-        :maxlength="1000"
-        show-count
-        style="margin-bottom: 12px;"
+    <div
+      v-if="auth.isLoggedIn"
+      :style="{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '24px' }"
+    >
+      <img
+        v-if="auth.user"
+        :src="getIdenticonUrl(auth.user.username, auth.user.avatar, 36)"
+        :style="{ width: '36px', height: '36px', borderRadius: '8px', flexShrink: '0' }"
+        alt=""
       />
-      <NButton type="primary" @click="handleSubmit" :disabled="!newContent.trim()">
-        {{ replyTo ? '发表回复' : '发表评论' }}
-      </NButton>
+      <div :style="{ flex: 1 }">
+        <div v-if="replyTo" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <NText depth="3" style="font-size: 13px;">回复 @{{ replyTo.user?.username }}：</NText>
+          <NButton size="tiny" text @click="cancelReply">取消</NButton>
+        </div>
+        <NInput
+          v-model:value="newContent"
+          type="textarea"
+          :placeholder="replyTo ? '写下你的回复...' : '写下你的评论...'"
+          :autosize="{ minRows: 3, maxRows: 8 }"
+          :maxlength="1000"
+          show-count
+          style="margin-bottom: 12px;"
+        />
+        <NButton type="primary" @click="handleSubmit" :disabled="!newContent.trim()">
+          {{ replyTo ? '发表回复' : '发表评论' }}
+        </NButton>
+      </div>
     </div>
     <NText v-else depth="3" style="display: block; margin-bottom: 24px;">
       请先登录后发表评论
