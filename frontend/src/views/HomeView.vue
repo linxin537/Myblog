@@ -87,39 +87,45 @@ onMounted(() => {
 </script>
 
 <template>
-  <div style="margin: -32px;">
-
-    <!-- Aurora Hero -->
-    <div class="aurora-animated" style="padding: 96px 32px 80px; text-align: center; position: relative; overflow: hidden;">
-      <!-- 顶部光晕 -->
-      <div style="position: absolute; top: -60%; left: -20%; width: 140%; height: 200%; background: radial-gradient(ellipse at center, rgba(45,212,191,0.06) 0%, transparent 60%); pointer-events: none;" />
-
-      <h1 class="aurora-title-in" style="font-family: 'Fraunces', 'Noto Serif SC', serif; font-size: 56px; font-weight: 600; line-height: 1.12; letter-spacing: -0.8px; margin: 0 0 20px; background: linear-gradient(135deg, var(--aurora-teal) 0%, var(--aurora-purple) 45%, var(--aurora-pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+    <!-- Hero -->
+    <div :style="{ textAlign: 'center', padding: '80px 32px 64px' }">
+      <h1 :style="{
+        fontSize: '28px',
+        fontWeight: 700,
+        lineHeight: 1.43,
+        color: 'var(--color-ink)',
+        margin: '0 0 8px',
+        letterSpacing: '0',
+      }">
         用文字记录思考
       </h1>
-      <p class="aurora-title-in-delayed" style="font-size: 20px; line-height: 1.5; color: var(--text-secondary); margin: 0 auto 48px; max-width: 480px; font-weight: 400;">
+      <p :style="{
+        fontSize: '16px',
+        color: 'var(--color-muted)',
+        margin: '0 auto 32px',
+        maxWidth: '480px',
+      }">
         分享技术见解与日常感悟
       </p>
 
-      <!-- 搜索 — 极光玻璃风格 -->
-      <div class="aurora-title-in-delayed-2" style="max-width: 500px; margin: 0 auto;">
+      <!-- Search Pill -->
+      <div :style="{ maxWidth: '500px', margin: '0 auto' }">
         <NInput
           v-model:value="searchKeyword"
           placeholder="搜索文章..."
           clearable
           round
           size="large"
-          class="glass-input"
           :style="{
-            '--n-border': '1px solid var(--border-glow)',
-            '--n-color': 'var(--bg-glass)',
-            '--n-color-focus': 'var(--bg-card-hover)',
-            '--n-text-color': 'var(--text-primary)',
-            '--n-placeholder-color': 'var(--text-tertiary)',
-            '--n-height': '52px',
+            '--n-border': '1px solid var(--color-hairline)',
+            '--n-color': 'var(--color-canvas)',
+            '--n-color-focus': 'var(--color-canvas)',
+            '--n-text-color': 'var(--color-ink)',
+            '--n-placeholder-color': 'var(--color-muted-soft)',
+            '--n-height': '56px',
             '--n-font-size': '16px',
-            '--n-border-radius': '980px',
-            '--n-box-shadow-focus': 'var(--glow-teal)',
+            '--n-border-radius': '9999px',
+            '--n-box-shadow-focus': 'var(--shadow-card)',
           }"
         >
           <template #prefix>
@@ -131,7 +137,13 @@ onMounted(() => {
 
     <!-- 筛选栏 + 列表 -->
     <div style="max-width: 780px; margin: 0 auto; padding: 0 32px 64px;">
-      <div class="glass" style="padding: 14px 20px; margin-bottom: 28px;">
+      <div :style="{
+        background: 'var(--color-canvas)',
+        border: '1px solid var(--color-hairline-soft)',
+        borderRadius: '14px',
+        padding: '14px 20px',
+        marginBottom: '24px',
+      }">
         <NSpace :size="12" style="width: 100%;">
           <NSelect
             v-model:value="selectedCategory"
@@ -156,8 +168,8 @@ onMounted(() => {
       </div>
 
       <template v-if="initialLoading">
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-          <ArticleCardSkeleton v-for="i in 3" :key="i" />
+        <div :style="{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }">
+          <ArticleCardSkeleton v-for="i in 4" :key="i" />
         </div>
       </template>
 
@@ -172,7 +184,7 @@ onMounted(() => {
           </NEmpty>
         </div>
 
-        <div v-else style="display: flex; flex-direction: column; gap: 20px;">
+        <div v-else :style="{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }">
           <div
             v-for="article in articles"
             :key="article.id"
@@ -192,5 +204,4 @@ onMounted(() => {
         />
       </div>
     </div>
-  </div>
 </template>
