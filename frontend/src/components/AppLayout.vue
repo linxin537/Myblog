@@ -5,6 +5,8 @@ import { useAuthStore } from '../stores/auth'
 import { Moon, Sunny } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 import { onMounted, ref } from 'vue'
+import NotificationBell from './NotificationBell.vue'
+import { useNotificationStore } from '../stores/notification'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -14,6 +16,8 @@ const dark = defineModel<boolean>('dark', { default: false })
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
+const notifStore = useNotificationStore()
+notifStore.startPolling()
 
 const headerScrolled = ref(false)
 
@@ -132,6 +136,8 @@ function isActive(path: string) {
             <NIcon :component="dark ? Sunny : Moon" />
           </template>
         </NButton>
+
+        <NotificationBell v-if="auth.isLoggedIn" />
 
         <template v-if="auth.isLoggedIn">
           <NButton text :style="{ fontSize: '13px', color: 'var(--color-muted)' }" @click="router.push('/settings')">
