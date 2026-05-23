@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from app.config import get_settings
 from app.database import engine, Base
 from app.models import User  # noqa: F401
+from app.models.notification import Notification  # noqa: F401
 from app.api.v1.auth import router as auth_router
 from app.api.v1.users import router as users_router
 from app.api.v1.categories import router as categories_router
@@ -16,6 +17,7 @@ from app.api.v1.comments import router as comments_router
 from app.api.v1.admin import router as admin_router
 from app.api.v1.rss import router as rss_router
 from app.api.v1.sitemap import router as sitemap_router
+from app.api.v1.notifications import router as notifications_router
 from app.core.errors import AppError
 from app.core.middleware import RateLimitMiddleware
 from app.schemas.common import error_response
@@ -63,6 +65,7 @@ app.include_router(comments_router, prefix="/api/v1")
 app.include_router(admin_router, prefix="/api/v1")
 app.include_router(rss_router, prefix="/api/v1")
 app.include_router(sitemap_router, prefix="/api/v1")
+app.include_router(notifications_router, prefix="/api/v1")
 
 
 @app.exception_handler(AppError)
