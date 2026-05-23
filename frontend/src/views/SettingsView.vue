@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { NButton, NInput, NTabs, NTabPane, NSpace, NText, useMessage } from 'naive-ui'
 import { useAuthStore } from '../stores/auth'
-import GlassCard from '../components/GlassCard.vue'
 import AuthorDashboard from '../components/AuthorDashboard.vue'
 import client from '../api/client'
 import type { ApiResponse } from '../types/api'
@@ -59,51 +58,90 @@ async function changePassword() {
 
 <template>
   <div style="max-width: 600px; margin: 0 auto; padding-top: 24px;">
-    <NText tag="h2" style="font-size: 24px; font-weight: 700; margin-bottom: 24px;">
+    <NText tag="h2" :style="{ fontSize: '24px', fontWeight: 700, marginBottom: '24px', display: 'block' }">
       个人设置
     </NText>
 
     <NTabs type="line">
       <NTabPane tab="个人资料" name="profile">
-        <GlassCard style="margin-top: 16px;">
+        <div class="card" :style="{ padding: '24px', marginTop: '16px' }">
           <NSpace vertical size="large" style="width: 100%;">
             <div>
-              <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block;">头像 URL</NText>
-              <NInput v-model:value="avatar" placeholder="输入头像图片链接" />
+              <NText :depth="3" :style="{ fontSize: '13px', marginBottom: '6px', display: 'block', color: 'var(--color-muted)' }">头像 URL</NText>
+              <NInput
+                v-model:value="avatar"
+                placeholder="输入头像图片链接"
+                :style="{ '--n-border-radius': '8px' }"
+              />
             </div>
             <div>
-              <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block;">个人简介</NText>
-              <NInput v-model:value="bio" type="textarea" :autosize="{ minRows: 3, maxRows: 6 }" placeholder="介绍一下自己..." maxlength="200" show-count />
+              <NText :depth="3" :style="{ fontSize: '13px', marginBottom: '6px', display: 'block', color: 'var(--color-muted)' }">个人简介</NText>
+              <NInput
+                v-model:value="bio"
+                type="textarea"
+                :autosize="{ minRows: 3, maxRows: 6 }"
+                placeholder="介绍一下自己..."
+                maxlength="200"
+                show-count
+                :style="{ '--n-border-radius': '8px' }"
+              />
             </div>
-            <NButton type="primary" @click="saveProfile">保存</NButton>
+            <NButton
+              type="primary"
+              :style="{ borderRadius: '8px', height: '40px' }"
+              @click="saveProfile"
+            >
+              保存
+            </NButton>
           </NSpace>
-        </GlassCard>
+        </div>
       </NTabPane>
 
       <NTabPane v-if="auth.isAuthor" tab="数据统计" name="stats">
-        <GlassCard style="margin-top: 16px;">
+        <div class="card" :style="{ padding: '24px', marginTop: '16px' }">
           <AuthorDashboard />
-        </GlassCard>
+        </div>
       </NTabPane>
 
       <NTabPane tab="修改密码" name="password">
-        <GlassCard style="margin-top: 16px;">
+        <div class="card" :style="{ padding: '24px', marginTop: '16px' }">
           <NSpace vertical size="large" style="width: 100%;">
             <div>
-              <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block;">旧密码</NText>
-              <NInput v-model:value="oldPassword" type="password" placeholder="输入旧密码" />
+              <NText :depth="3" :style="{ fontSize: '13px', marginBottom: '6px', display: 'block', color: 'var(--color-muted)' }">旧密码</NText>
+              <NInput
+                v-model:value="oldPassword"
+                type="password"
+                placeholder="输入旧密码"
+                :style="{ '--n-border-radius': '8px' }"
+              />
             </div>
             <div>
-              <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block;">新密码</NText>
-              <NInput v-model:value="newPassword" type="password" placeholder="至少 8 位，包含字母和数字" />
+              <NText :depth="3" :style="{ fontSize: '13px', marginBottom: '6px', display: 'block', color: 'var(--color-muted)' }">新密码</NText>
+              <NInput
+                v-model:value="newPassword"
+                type="password"
+                placeholder="至少 8 位，包含字母和数字"
+                :style="{ '--n-border-radius': '8px' }"
+              />
             </div>
             <div>
-              <NText depth="3" style="font-size: 13px; margin-bottom: 6px; display: block;">确认新密码</NText>
-              <NInput v-model:value="confirmPassword" type="password" placeholder="再次输入新密码" />
+              <NText :depth="3" :style="{ fontSize: '13px', marginBottom: '6px', display: 'block', color: 'var(--color-muted)' }">确认新密码</NText>
+              <NInput
+                v-model:value="confirmPassword"
+                type="password"
+                placeholder="再次输入新密码"
+                :style="{ '--n-border-radius': '8px' }"
+              />
             </div>
-            <NButton type="primary" @click="changePassword">修改密码</NButton>
+            <NButton
+              type="primary"
+              :style="{ borderRadius: '8px', height: '40px' }"
+              @click="changePassword"
+            >
+              修改密码
+            </NButton>
           </NSpace>
-        </GlassCard>
+        </div>
       </NTabPane>
     </NTabs>
   </div>
