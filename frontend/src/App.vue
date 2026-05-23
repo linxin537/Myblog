@@ -1,13 +1,48 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { ref, watch, watchEffect, onMounted, nextTick } from 'vue'
 import { NConfigProvider, NMessageProvider, NDialogProvider, darkTheme, type GlobalThemeOverrides } from 'naive-ui'
+import gsap from 'gsap'
+import { useRoute } from 'vue-router'
 import AppLayout from './components/AppLayout.vue'
+import DynamicCursor from './components/DynamicCursor.vue'
 
-const isDark = ref(true)
+const THEME_KEY = 'blog-theme'
+
+function getSavedTheme(): boolean {
+  const saved = localStorage.getItem(THEME_KEY)
+  if (saved !== null) return saved === 'dark'
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
+const isDark = ref(getSavedTheme())
+
+onMounted(() => {
+  document.documentElement.setAttribute('data-theme', isDark.value ? 'dark' : 'light')
+})
 
 watchEffect(() => {
   document.documentElement.setAttribute('data-theme', isDark.value ? 'dark' : 'light')
+  localStorage.setItem(THEME_KEY, isDark.value ? 'dark' : 'light')
 })
+
+const route = useRoute()
+
+// Page transition: animate on route change
+watch(
+  () => route.fullPath,
+  () => {
+    nextTick(() => {
+      const page = document.querySelector('.page-content')
+      if (page) {
+        gsap.fromTo(
+          page,
+          { opacity: 0, y: 8 },
+          { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+        )
+      }
+    })
+  }
+)
 
 const lightThemeOverrides: GlobalThemeOverrides = {
   common: {
@@ -66,11 +101,12 @@ const darkThemeOverrides: GlobalThemeOverrides = {
   <NConfigProvider :theme="isDark ? darkTheme : undefined" :theme-overrides="isDark ? darkThemeOverrides : lightThemeOverrides">
     <NMessageProvider>
       <NDialogProvider>
+        <DynamicCursor />
         <AppLayout v-model:dark="isDark">
-          <RouterView v-slot="{ Component }">
-            <Transition name="page" mode="out-in">
+          <RouterView v-slot="{ Component, route: r }">
+            <div class="page-content" :key="r.fullPath">
               <component :is="Component" />
-            </Transition>
+            </div>
           </RouterView>
         </AppLayout>
       </NDialogProvider>
