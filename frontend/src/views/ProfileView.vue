@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { NButton, NText, NSpace, NTag, NSpin, NResult, NPagination, NEmpty } from 'naive-ui'
 import client from '../api/client'
 import ArticleCard from '../components/ArticleCard.vue'
 import type { UserInfo, ArticleInfo, ApiResponse } from '../types/api'
 import { getIdenticonUrl } from '../utils/identicon'
+import gsap from 'gsap'
 
 const route = useRoute()
 const router = useRouter()
@@ -47,7 +48,31 @@ function onPageChange(p: number) {
   loadProfile()
 }
 
+let animCtx: gsap.Context | undefined
+
 onMounted(loadProfile)
+
+watch(profile, () => {
+  if (profile.value) {
+    nextTick(() => {
+      animCtx?.revert()
+      animCtx = gsap.context(() => {
+        gsap.fromTo('.profile-section > *', {
+          opacity: 0, y: 16,
+        }, {
+          opacity: 1, y: 0,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: 'power2.out',
+        })
+      })
+    })
+  }
+})
+
+onBeforeUnmount(() => {
+  animCtx?.revert()
+})
 </script>
 
 <template>
@@ -66,7 +91,7 @@ onMounted(loadProfile)
       <template v-else-if="profile">
         <!-- 用户信息卡片 -->
         <div
-          class="card"
+          class="profile-section card"
           :style="{
             padding: '40px 32px 32px',
             marginBottom: '32px',

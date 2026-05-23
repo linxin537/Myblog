@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { NButton, NInput, NTabs, NTabPane, NSpace, NText, useMessage } from 'naive-ui'
 import { useAuthStore } from '../stores/auth'
 import AuthorDashboard from '../components/AuthorDashboard.vue'
 import client from '../api/client'
 import type { ApiResponse } from '../types/api'
+import gsap from 'gsap'
 
 const message = useMessage()
 const auth = useAuthStore()
@@ -17,6 +18,12 @@ async function saveProfile() {
   const { data } = await client.put<ApiResponse>('/users/me', { avatar: avatar.value, bio: bio.value })
   if (data.code === 0) {
     message.success('个人资料已更新')
+    nextTick(() => {
+      const btn = document.querySelector('.save-btn') as HTMLElement
+      if (btn) {
+        gsap.fromTo(btn, { scale: 1 }, { scale: 1.08, duration: 0.2, yoyo: true, repeat: 1, ease: 'power2.out' })
+      }
+    })
     await auth.fetchUser()
   } else {
     message.error(data.message)
@@ -47,6 +54,12 @@ async function changePassword() {
   })
   if (data.code === 0) {
     message.success('密码修改成功，请重新登录')
+    nextTick(() => {
+      const btn = document.querySelector('.save-btn') as HTMLElement
+      if (btn) {
+        gsap.fromTo(btn, { scale: 1 }, { scale: 1.08, duration: 0.2, yoyo: true, repeat: 1, ease: 'power2.out' })
+      }
+    })
     oldPassword.value = ''
     newPassword.value = ''
     confirmPassword.value = ''
@@ -88,6 +101,7 @@ async function changePassword() {
             </div>
             <NButton
               type="primary"
+              class="save-btn"
               :style="{ borderRadius: '8px', height: '40px' }"
               @click="saveProfile"
             >
@@ -135,6 +149,7 @@ async function changePassword() {
             </div>
             <NButton
               type="primary"
+              class="save-btn"
               :style="{ borderRadius: '8px', height: '40px' }"
               @click="changePassword"
             >
