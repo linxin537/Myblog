@@ -1,20 +1,30 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <div class="glass-aurora" style="padding: 24px; margin-bottom: 0; border-radius: 16px;">
-    <div style="display: flex; gap: 16px;">
-      <div class="skeleton-pulse" style="width: 200px; height: 120px; flex-shrink: 0; border-radius: 8px;" />
-      <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
-        <div class="skeleton-pulse" style="height: 22px; width: 70%;" />
-        <div class="skeleton-pulse" style="height: 14px; width: 90%;" />
-        <div class="skeleton-pulse" style="height: 14px; width: 50%;" />
-        <div style="display: flex; gap: 8px; margin-top: auto;">
-          <div class="skeleton-pulse" style="height: 20px; width: 50px; border-radius: 10px;" />
-          <div class="skeleton-pulse" style="height: 20px; width: 50px; border-radius: 10px;" />
-        </div>
+  <div :style="{
+    borderRadius: '14px',
+    overflow: 'hidden',
+    border: '1px solid var(--color-hairline-soft)',
+    background: 'var(--color-canvas)',
+  }">
+    <div :style="{
+      aspectRatio: '1 / 1',
+      background: 'var(--color-surface-soft)',
+      animation: 'pulse 1.5s ease-in-out infinite',
+    }" />
+    <div :style="{ padding: '16px' }">
+      <div :style="{ height: '14px', width: '40%', background: 'var(--color-surface-soft)', borderRadius: '4px', marginBottom: '8px', animation: 'pulse 1.5s ease-in-out infinite' }" />
+      <div :style="{ height: '18px', width: '90%', background: 'var(--color-surface-soft)', borderRadius: '4px', marginBottom: '6px', animation: 'pulse 1.5s ease-in-out infinite' }" />
+      <div :style="{ height: '18px', width: '65%', background: 'var(--color-surface-soft)', borderRadius: '4px', marginBottom: '12px', animation: 'pulse 1.5s ease-in-out infinite' }" />
+      <div :style="{ display: 'flex', justifyContent: 'space-between' }">
+        <div :style="{ height: '13px', width: '35%', background: 'var(--color-surface-soft)', borderRadius: '4px', animation: 'pulse 1.5s ease-in-out infinite' }" />
+        <div :style="{ height: '13px', width: '20%', background: 'var(--color-surface-soft)', borderRadius: '4px', animation: 'pulse 1.5s ease-in-out infinite' }" />
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+</style>
