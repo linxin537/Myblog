@@ -18,17 +18,24 @@ const columns: DataTableColumn[] = [
   { title: 'ID', key: 'id', width: 60 },
   { title: '名称', key: 'name' },
   {
-    title: '操作', key: 'actions', width: 160,
+    title: '操作', key: 'actions', width: 130,
     render(row: any) {
-      return h(NSpace, null, {
-        default: () => [
-          h(NButton, { size: 'tiny', onClick: () => openEdit(row) }, { default: () => '编辑' }),
-          h(NPopconfirm, { onPositiveClick: () => handleDelete(row.id) }, {
-            trigger: () => h(NButton, { size: 'tiny', type: 'error', secondary: true }, { default: () => '删除' }),
-            default: () => '确定删除此标签？',
-          }),
-        ],
-      })
+      return h(NSpace, { size: 8 }, () => [
+        h(NButton, {
+          text: true,
+          size: 'small',
+          style: { color: 'var(--color-primary)', fontWeight: 500 },
+          onClick: () => openEdit(row),
+        }, () => '编辑'),
+        h(NPopconfirm, { onPositiveClick: () => handleDelete(row.id) }, {
+          trigger: () => h(NButton, {
+            text: true,
+            size: 'small',
+            style: { color: 'var(--color-error)', fontWeight: 500 },
+          }, () => '删除'),
+          default: () => '确定删除此标签？',
+        }),
+      ])
     },
   },
 ]
@@ -79,25 +86,25 @@ onMounted(loadTags)
 
 <template>
   <div style="max-width: 600px; margin: 0 auto; padding-top: 24px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <NText tag="h2" strong>标签管理</NText>
-      <NButton type="primary" @click="openCreate">新增标签</NButton>
+    <div :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }">
+      <NText tag="h2" :style="{ fontSize: '24px', fontWeight: 700 }">标签管理</NText>
+      <NButton type="primary" :style="{ borderRadius: '8px' }" @click="openCreate">新增标签</NButton>
     </div>
 
-    <div class="glass" style="padding: 16px;">
+    <div class="card" :style="{ padding: '4px 0', overflow: 'hidden' }">
       <NDataTable :columns="columns" :data="tags" :loading="loading" />
     </div>
 
     <NModal v-model:show="showModal" :title="editingId ? '编辑标签' : '新增标签'">
-      <div class="glass" style="padding: 24px; width: 380px; max-width: 90vw;">
-        <NForm ref="formRef" :model="form" label-placement="left">
+      <div class="card" :style="{ padding: '24px', width: '380px', maxWidth: '90vw' }">
+        <NForm ref="formRef" :model="form" label-placement="top">
           <NFormItem label="名称" path="name" :rule="{ required: true, message: '请输入标签名' }">
-            <NInput v-model:value="form.name" />
+            <NInput v-model:value="form.name" :style="{ '--n-border-radius': '8px' }" />
           </NFormItem>
         </NForm>
         <NSpace justify="end" style="margin-top: 16px;">
           <NButton @click="showModal = false">取消</NButton>
-          <NButton type="primary" @click="handleSave">保存</NButton>
+          <NButton type="primary" :style="{ borderRadius: '8px' }" @click="handleSave">保存</NButton>
         </NSpace>
       </div>
     </NModal>
