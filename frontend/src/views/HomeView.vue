@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { NInput, NSelect, NPagination, NButton, NSpin, NEmpty, NSpace, NTag, NText } from 'naive-ui'
+import { NInput, NSelect, NPagination, NButton, NSpin, NEmpty, NSpace } from 'naive-ui'
 import { Search } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 import ArticleCard from '../components/ArticleCard.vue'

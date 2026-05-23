@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { NSpace, NText, NSpin } from 'naive-ui'
+import { NText, NSpin } from 'naive-ui'
 import { FileTrayFull, Eye, Heart, Star } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 import client from '../api/client'

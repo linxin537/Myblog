@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { NButton, NTag, NText, NSpace, NSpin, NResult, NPopconfirm, useMessage } from 'naive-ui'
+import { NButton, NTag, NSpace, NSpin, NResult, NPopconfirm, useMessage } from 'naive-ui'
 import { marked } from 'marked'
 import hljs from 'highlight.js'
 import DOMPurify from 'dompurify'

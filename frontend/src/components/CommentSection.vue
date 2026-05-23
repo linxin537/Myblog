@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { NButton, NInput, NText, NSpace, NPagination, NEmpty, useMessage } from 'naive-ui'
+import { NButton, NInput, NText, NPagination, NEmpty, useMessage } from 'naive-ui'
 import { getIdenticonUrl } from '../utils/identicon'
 import { getComments, createComment } from '../api/comments'
 import { useAuthStore } from '../stores/auth'

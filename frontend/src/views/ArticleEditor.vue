@@ -2,12 +2,11 @@
 import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
-  NInput, NSelect, NButton, NTag, NSpace, NSpin, NText,
+  NInput, NSelect, NButton, NSpace, NSpin, NText,
   NSwitch, NModal, useMessage, useDialog,
 } from 'naive-ui'
 import MarkdownEditor from '../components/MarkdownEditor.vue'
 import ImageUpload from '../components/ImageUpload.vue'
-import { useAuthStore } from '../stores/auth'
 import { getArticle, createArticle, updateArticle } from '../api/articles'
 import { getCategories } from '../api/categories'
 import { getTags, createTag } from '../api/tags'
@@ -19,7 +18,6 @@ const route = useRoute()
 const router = useRouter()
 const message = useMessage()
 const dialog = useDialog()
-const auth = useAuthStore()
 const { loadDraft, saveDraft, flushDraft, clearDraft, hasDraft } = useDraftSave()
 
 const articleId = route.params.id ? Number(route.params.id) : null
