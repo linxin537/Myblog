@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { NPagination, NEmpty, NSpin, NText } from 'naive-ui'
 import { getFavorites } from '../api/articles'
 import ArticleCard from '../components/ArticleCard.vue'
 import type { ArticleInfo } from '../types/api'
+
+const router = useRouter()
 
 const articles = ref<ArticleInfo[]>([])
 const loading = ref(false)
@@ -33,8 +36,8 @@ onMounted(load)
 </script>
 
 <template>
-  <div style="max-width: 800px; margin: 0 auto; padding-top: 24px;">
-    <NText tag="h2" style="font-size: 24px; font-weight: 700; margin-bottom: 24px;">
+  <div :style="{ maxWidth: '820px', margin: '0 auto', paddingTop: '24px' }">
+    <NText tag="h2" :style="{ fontSize: '24px', fontWeight: 700, marginBottom: '24px', display: 'block' }">
       我的收藏
     </NText>
 
@@ -42,21 +45,25 @@ onMounted(load)
       <template v-if="!loading && articles.length === 0">
         <NEmpty description="还没有收藏任何文章" />
       </template>
-      <div v-else>
-        <ArticleCard
+      <div
+        v-else
+        :style="{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }"
+      >
+        <div
           v-for="article in articles"
           :key="article.id"
-          :article="article"
-          style="margin-bottom: 16px;"
-        />
-        <div v-if="total > pageSize" style="display: flex; justify-content: center; margin-top: 24px;">
-          <NPagination
-            :page="page"
-            :page-size="pageSize"
-            :item-count="total"
-            @update:page="onPageChange"
-          />
+          @click="router.push(`/article/${article.id}`)"
+        >
+          <ArticleCard :article="article" />
         </div>
+      </div>
+      <div v-if="total > pageSize" style="display: flex; justify-content: center; margin-top: 32px;">
+        <NPagination
+          :page="page"
+          :page-size="pageSize"
+          :item-count="total"
+          @update:page="onPageChange"
+        />
       </div>
     </NSpin>
   </div>
