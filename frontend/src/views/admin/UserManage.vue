@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, h } from 'vue'
-import { NButton, NTag, NText, NSpace, NDataTable, NSelect, NSwitch, NInput, useMessage } from 'naive-ui'
+import {
+  NButton, NTag, NText, NSpace, NDataTable, NSelect, NSwitch, NInput,
+  NModal, NForm, NFormItem, NPopconfirm, useMessage,
+} from 'naive-ui'
 import type { DataTableColumns } from 'naive-ui'
-import { getUsers, updateUserRole, updateUserStatus, type UserManageInfo } from '../../api/admin'
+import { getUsers, updateUserRole, updateUserStatus, updateUser, deleteUser, type UserManageInfo } from '../../api/admin'
 import { useAuthStore } from '../../stores/auth'
 
 const message = useMessage()
@@ -21,6 +24,39 @@ const roleOptions = [
   { label: '作者', value: 'author' },
   { label: '读者', value: 'reader' },
 ]
+
+// Edit dialog
+const showEditModal = ref(false)
+const editingUser = ref<UserManageInfo | null>(null)
+const editForm = ref({ username: '', email: '', bio: '' })
+const editSaving = ref(false)
+
+function openEditDialog(user: UserManageInfo) {
+  editingUser.value = user
+  editForm.value = { username: user.username, email: user.email, bio: user.bio || '' }
+  showEditModal.value = true
+}
+
+async function handleSaveEdit() {
+  if (!editingUser.value) return
+  editSaving.value = true
+  try {
+    const { data } = await updateUser(editingUser.value.id, {
+      username: editForm.value.username,
+      email: editForm.value.email,
+      bio: editForm.value.bio || undefined,
+    })
+    if (data.code === 0) {
+      message.success('用户信息已更新')
+      showEditModal.value = false
+      load()
+    } else {
+      message.error(data.message)
+    }
+  } finally {
+    editSaving.value = false
+  }
+}
 
 async function load() {
   loading.value = true
@@ -51,6 +87,16 @@ async function handleStatusChange(userId: number, isActive: boolean) {
   const { data } = await updateUserStatus(userId, isActive)
   if (data.code === 0) {
     message.success(isActive ? '已启用' : '已禁用')
+    load()
+  } else {
+    message.error(data.message)
+  }
+}
+
+async function handleDelete(userId: number) {
+  const { data } = await deleteUser(userId)
+  if (data.code === 0) {
+    message.success('用户已删除')
     load()
   } else {
     message.error(data.message)
@@ -89,6 +135,25 @@ const columns: DataTableColumns<UserManageInfo> = [
     title: '注册时间', key: 'created_at', width: 160,
     render(row) { return new Date(row.created_at).toLocaleDateString('zh-CN') },
   },
+  {
+    title: '操作', key: 'actions', width: 140,
+    render(row) {
+      return h(NSpace, { size: 'small' }, () => [
+        h(NButton, { size: 'small', onClick: () => openEditDialog(row) }, () => '编辑'),
+        h(
+          NPopconfirm,
+          { onPositiveClick: () => handleDelete(row.id) },
+          {
+            default: () => '确定删除该用户？',
+            trigger: () => h(NButton, {
+              size: 'small', type: 'error', secondary: true,
+              disabled: row.id === auth.user?.id,
+            }, () => '删除'),
+          },
+        ),
+      ])
+    },
+  },
 ]
 
 function onSearch() {
@@ -100,7 +165,7 @@ onMounted(load)
 </script>
 
 <template>
-  <div style="max-width: 1000px; margin: 0 auto; padding-top: 24px;">
+  <div style="max-width: 1100px; margin: 0 auto; padding-top: 24px;">
     <NText tag="h2" style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">用户管理</NText>
 
     <div style="display: flex; gap: 12px; margin-bottom: 16px;">
@@ -118,5 +183,26 @@ onMounted(load)
       @update:page="(p: number) => { page = p; load(); }"
       @update:page-size="(s: number) => { pageSize = s; load(); }"
     />
+
+    <!-- 编辑用户弹窗 -->
+    <NModal v-model:show="showEditModal" title="编辑用户信息">
+      <div style="width: 420px; max-width: 90vw; padding: 24px;">
+        <NForm label-placement="top">
+          <NFormItem label="用户名">
+            <NInput v-model:value="editForm.username" />
+          </NFormItem>
+          <NFormItem label="邮箱">
+            <NInput v-model:value="editForm.email" />
+          </NFormItem>
+          <NFormItem label="简介">
+            <NInput v-model:value="editForm.bio" type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" />
+          </NFormItem>
+        </NForm>
+        <NSpace justify="end" style="margin-top: 20px;">
+          <NButton @click="showEditModal = false">取消</NButton>
+          <NButton type="primary" :loading="editSaving" @click="handleSaveEdit">保存</NButton>
+        </NSpace>
+      </div>
+    </NModal>
   </div>
 </template>

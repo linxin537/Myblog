@@ -37,3 +37,9 @@ class UpdateRoleRequest(BaseModel):
 
 class UpdateStatusRequest(BaseModel):
     is_active: bool
+
+
+class UpdateUserRequest(BaseModel):
+    username: str | None = None
+    email: str | None = None
+    bio: str | None = None

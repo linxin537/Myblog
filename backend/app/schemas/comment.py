@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
+from app.schemas.auth import UserResponse
 
 
 class CommentBase(BaseModel):
@@ -21,7 +22,10 @@ class CommentResponse(CommentBase):
     parent_id: int | None
     created_at: datetime
     updated_at: datetime | None
-    user: "UserResponse | None" = None  # type: ignore[name-defined]
+    user: UserResponse | None = None
     replies: list["CommentResponse"] = []
 
     model_config = {"from_attributes": True}
+
+
+CommentResponse.model_rebuild()

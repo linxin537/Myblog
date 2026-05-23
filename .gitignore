@@ -1,10 +1,14 @@
-# Backend
+# Environment
+.env
 backend/venv/
 backend/**/__pycache__/
 backend/.env
 backend/*.db
 backend/static/uploads/*
 !backend/static/uploads/.gitkeep
+
+# Backups
+backups/
 
 # Frontend
 frontend/node_modules/

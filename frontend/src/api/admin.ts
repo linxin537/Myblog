@@ -39,6 +39,14 @@ export function updateUserStatus(userId: number, isActive: boolean) {
   return client.put<ApiResponse<UserManageInfo>>(`/admin/users/${userId}/status`, { is_active: isActive })
 }
 
+export function updateUser(userId: number, data: { username?: string; email?: string; bio?: string }) {
+  return client.put<ApiResponse<UserManageInfo>>(`/admin/users/${userId}`, data)
+}
+
+export function deleteUser(userId: number) {
+  return client.delete<ApiResponse<null>>(`/admin/users/${userId}`)
+}
+
 export function getAuditLogs(params?: { page?: number; page_size?: number; action?: string; user_id?: number }) {
   return client.get<PaginatedResponse<AuditLogInfo>>('/admin/audit-logs', { params })
 }

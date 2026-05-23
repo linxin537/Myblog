@@ -5,7 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.user import User, UserRole
 from app.models.audit_log import AuditLog
-from app.schemas.admin import UserManageResponse, UpdateRoleRequest, UpdateStatusRequest, AuditLogResponse
+from datetime import datetime
+from app.schemas.admin import UserManageResponse, UpdateRoleRequest, UpdateStatusRequest, UpdateUserRequest, AuditLogResponse
 from app.schemas.common import success_response, error_response
 from app.api.deps import get_current_user, require_role
 from app.services import log_action
@@ -145,3 +146,71 @@ async def update_user_status(
                      detail=f"active={req.is_active}")
 
     return success_response(data=UserManageResponse.model_validate(user).model_dump())
+
+
+@router.put("/admin/users/{user_id}")
+async def update_user(
+    user_id: int,
+    req: UpdateUserRequest,
+    request: Request,
+    current_user: User = Depends(require_role(UserRole.admin)),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(User).where(User.id == user_id, User.deleted_at.is_(None)))
+    user = result.scalar_one_or_none()
+    if not user:
+        return error_response(1004, "用户不存在")
+
+    if req.username is not None:
+        if len(req.username) < 3 or len(req.username) > 50:
+            return error_response(1001, "用户名长度须为 3-50 个字符")
+        existing = await db.execute(
+            select(User).where(User.username == req.username, User.id != user_id, User.deleted_at.is_(None))
+        )
+        if existing.scalar_one_or_none():
+            return error_response(2001, "用户名已被占用")
+        user.username = req.username
+
+    if req.email is not None:
+        existing = await db.execute(
+            select(User).where(User.email == req.email, User.id != user_id, User.deleted_at.is_(None))
+        )
+        if existing.scalar_one_or_none():
+            return error_response(2002, "邮箱已被占用")
+        user.email = req.email
+
+    if req.bio is not None:
+        user.bio = req.bio
+
+    await db.flush()
+    await db.refresh(user)
+
+    await log_action(db, action="update_user", user_id=current_user.id,
+                     target_type="user", target_id=user_id, request=request,
+                     detail=f"Updated user info")
+
+    return success_response(data=UserManageResponse.model_validate(user).model_dump())
+
+
+@router.delete("/admin/users/{user_id}")
+async def delete_user(
+    user_id: int,
+    request: Request,
+    current_user: User = Depends(require_role(UserRole.admin)),
+    db: AsyncSession = Depends(get_db),
+):
+    if user_id == current_user.id:
+        return error_response(1005, "不能删除自己")
+
+    result = await db.execute(select(User).where(User.id == user_id, User.deleted_at.is_(None)))
+    user = result.scalar_one_or_none()
+    if not user:
+        return error_response(1004, "用户不存在")
+
+    user.deleted_at = datetime.utcnow()
+    await db.flush()
+
+    await log_action(db, action="delete_user", user_id=current_user.id,
+                     target_type="user", target_id=user_id, request=request)
+
+    return success_response(message=f"用户 {user.username} 已删除")
