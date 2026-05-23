@@ -57,8 +57,17 @@ const columns: DataTableColumns<AuditLogInfo> = [
   {
     title: '操作', key: 'action', width: 110,
     render(row) {
-      return h(NTag, { type: row.action.includes('delete') ? 'error' : 'info', size: 'small' },
-        { default: () => actionLabels[row.action] || row.action })
+      const isDelete = row.action.includes('delete')
+      return h(NTag, {
+        size: 'small',
+        bordered: false,
+        style: {
+          background: isDelete ? 'rgba(193,53,21,0.08)' : 'var(--color-surface-soft)',
+          color: isDelete ? 'var(--color-error)' : 'var(--color-muted)',
+          borderRadius: '9999px',
+          fontWeight: 500,
+        },
+      }, { default: () => actionLabels[row.action] || row.action })
     },
   },
   { title: '目标', key: 'target_type', width: 80 },
@@ -76,8 +85,8 @@ onMounted(load)
 
 <template>
   <div style="max-width: 1200px; margin: 0 auto; padding-top: 24px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-      <NText tag="h2" style="font-size: 24px; font-weight: 700;">审计日志</NText>
+    <div :style="{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }">
+      <NText tag="h2" :style="{ fontSize: '24px', fontWeight: 700 }">审计日志</NText>
       <NSelect
         v-model:value="actionFilter"
         :options="actionOptions"
@@ -88,15 +97,17 @@ onMounted(load)
       />
     </div>
 
-    <NDataTable
-      :columns="columns"
-      :data="logs"
-      :loading="loading"
-      :pagination="{ page: page, pageSize: pageSize, itemCount: total }"
-      :row-key="(row: AuditLogInfo) => row.id"
-      @update:page="(p: number) => { page = p; load(); }"
-      @update:page-size="(s: number) => { pageSize = s; load(); }"
-      :scroll-x="1000"
-    />
+    <div class="card" :style="{ padding: '4px 0', overflow: 'hidden' }">
+      <NDataTable
+        :columns="columns"
+        :data="logs"
+        :loading="loading"
+        :pagination="{ page: page, pageSize: pageSize, itemCount: total }"
+        :row-key="(row: AuditLogInfo) => row.id"
+        @update:page="(p: number) => { page = p; load(); }"
+        @update:page-size="(s: number) => { pageSize = s; load(); }"
+        :scroll-x="1000"
+      />
+    </div>
   </div>
 </template>
