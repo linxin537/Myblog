@@ -11,27 +11,53 @@ watchEffect(() => {
 
 const lightThemeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#0d9488',
-    primaryColorHover: '#14b8a6',
-    primaryColorPressed: '#0f766e',
-    borderRadius: '12px',
-    fontFamily: '"DM Sans", "Fraunces", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif',
+    primaryColor: '#ff385c',
+    primaryColorHover: '#e00b41',
+    primaryColorPressed: '#c90936',
+    borderRadius: '8px',
+    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif',
+    textColor1: '#222222',
+    textColor2: '#3f3f3f',
+    textColor3: '#6a6a6a',
   },
   Button: {
-    borderRadiusMedium: '980px',
+    borderRadiusMedium: '8px',
+    borderRadiusLarge: '8px',
+    borderRadiusSmall: '8px',
+    heightMedium: '40px',
+  },
+  Input: {
+    borderRadius: '8px',
+    heightLarge: '48px',
+  },
+  Tag: {
+    borderRadius: '8px',
   },
 }
 
 const darkThemeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#2dd4bf',
-    primaryColorHover: '#5eeadb',
-    primaryColorPressed: '#14b8a6',
-    borderRadius: '12px',
-    fontFamily: '"DM Sans", "Fraunces", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif',
+    primaryColor: '#ff5a7a',
+    primaryColorHover: '#ff7a95',
+    primaryColorPressed: '#e04868',
+    borderRadius: '8px',
+    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif',
+    textColor1: '#e8e8e8',
+    textColor2: '#b0b0b0',
+    textColor3: '#888888',
   },
   Button: {
-    borderRadiusMedium: '980px',
+    borderRadiusMedium: '8px',
+    borderRadiusLarge: '8px',
+    borderRadiusSmall: '8px',
+    heightMedium: '40px',
+  },
+  Input: {
+    borderRadius: '8px',
+    heightLarge: '48px',
+  },
+  Tag: {
+    borderRadius: '8px',
   },
 }
 </script>
