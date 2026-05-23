@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage, NForm, NFormItem, NInput, NButton, NCheckbox } from 'naive-ui'
 import type { FormInst, FormRules } from 'naive-ui'
 import { useAuthStore } from '../stores/auth'
+import gsap from 'gsap'
 import { getErrorMessage } from '../api/client'
 
 const router = useRouter()
@@ -51,6 +52,34 @@ const registerRules: FormRules = {
 }
 
 const lockText = computed(() => lockCountdown.value > 0 ? `账户已锁定，${lockCountdown.value}秒后重试` : '')
+
+let animCtx: gsap.Context | undefined
+
+onMounted(() => {
+  animCtx = gsap.context(() => {
+    const tl = gsap.timeline()
+    tl.fromTo('.login-form', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' })
+    // Animate background blobs
+    gsap.to('.login-blob-1', {
+      x: '10%', y: '-15%',
+      duration: 20,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+    })
+    gsap.to('.login-blob-2', {
+      x: '-8%', y: '10%',
+      duration: 18,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+    })
+  })
+})
+
+onBeforeUnmount(() => {
+  animCtx?.revert()
+})
 
 function startLockCountdown(seconds: number) {
   lockCountdown.value = seconds
@@ -116,8 +145,35 @@ async function handleRegister() {
 </script>
 
 <template>
-  <div style="max-width: 360px; margin: 0 auto; padding: 80px 0;">
-    <!-- 标题 -->
+  <div style="max-width: 360px; margin: 0 auto; padding: 80px 0; position: relative;">
+    <!-- Background blobs -->
+    <div class="login-blob-1" :style="{
+      position: 'fixed',
+      width: '400px',
+      height: '400px',
+      borderRadius: '50%',
+      background: 'radial-gradient(circle, rgba(255,56,92,0.08), transparent 70%)',
+      top: '-100px',
+      right: '-150px',
+      pointerEvents: 'none',
+      zIndex: 0,
+      filter: 'blur(80px)',
+    }" />
+    <div class="login-blob-2" :style="{
+      position: 'fixed',
+      width: '300px',
+      height: '300px',
+      borderRadius: '50%',
+      background: 'radial-gradient(circle, rgba(255,56,92,0.06), transparent 70%)',
+      bottom: '-80px',
+      left: '-100px',
+      pointerEvents: 'none',
+      zIndex: 0,
+      filter: 'blur(60px)',
+    }" />
+
+    <div class="login-form" style="position: relative; z-index: 1;">
+      <!-- 标题 -->
     <div style="font-size: 24px; font-weight: 700; color: var(--n-text-color); margin-bottom: 8px;">
       {{ isLogin ? '登录' : '注册' }}
     </div>
@@ -221,6 +277,7 @@ async function handleRegister() {
       <NButton text type="primary" @click="activeTab = isLogin ? 'register' : 'login'">
         {{ isLogin ? '还没有账户？注册' : '已有账户？登录' }}
       </NButton>
+    </div>
     </div>
   </div>
 </template>
