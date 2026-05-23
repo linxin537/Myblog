@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { NTag, NText, NSpace } from 'naive-ui'
 import type { ArticleInfo } from '../types/api'
+import { formatReadingTime } from '../composables/useReadingTime'
 
 const props = defineProps<{ article: ArticleInfo }>()
 
@@ -73,6 +74,9 @@ function formatDate(d: string) {
       </NSpace>
       <NText depth="3" :style="{ fontSize: '13px' }">
         {{ article.view_count }} 阅读
+      </NText>
+      <NText depth="3" :style="{ fontSize: '13px' }">
+        · {{ formatReadingTime(article.summary || '') }}
       </NText>
     </div>
 

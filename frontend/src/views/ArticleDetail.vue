@@ -13,6 +13,7 @@ import FavoriteButton from '../components/FavoriteButton.vue'
 import TableOfContents from '../components/TableOfContents.vue'
 import type { ArticleDetail as ArticleDetailType } from '../types/api'
 import { getIdenticonUrl } from '../utils/identicon'
+import { formatReadingTime } from '../composables/useReadingTime'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -226,7 +227,7 @@ watch(() => route.params.id, () => {
                 {{ article.author?.username }}
               </div>
               <div :style="{ fontSize: '13px', color: 'var(--color-muted)' }">
-                {{ formatDate(article.published_at || article.created_at) }} · {{ article.view_count }} 阅读
+                {{ formatDate(article.published_at || article.created_at) }} · {{ article.view_count }} 阅读 · {{ formatReadingTime(article.content || '') }}
               </div>
             </div>
           </div>
