@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { NButton, NText, NTag, NSpace, NInput, NPopconfirm, useMessage } from 'naive-ui'
 import { updateComment, deleteComment } from '../api/comments'
 import { useAuthStore } from '../stores/auth'
+import { getIdenticonUrl } from '../utils/identicon'
 import type { CommentInfo } from '../types/api'
 
 const props = defineProps<{
@@ -64,37 +65,56 @@ async function handleDelete() {
 
 <template>
   <div :style="{ marginLeft: comment.parent_id ? '24px' : '0', marginBottom: comment.parent_id ? '12px' : '20px' }">
-    <div class="glass" style="padding: 14px 18px; border-radius: 12px;">
-      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-        <NText strong style="font-size: 14px;">{{ comment.user?.username || '匿名' }}</NText>
-        <NTag v-if="comment.user?.role === 'admin'" type="error" size="tiny" :bordered="false">管理员</NTag>
-        <NText depth="3" style="font-size: 12px;">{{ formatDate(comment.created_at) }}</NText>
-      </div>
+    <div
+      :style="{
+        padding: '14px 18px',
+        borderRadius: '12px',
+        background: 'rgba(var(--color-canvas-rgb), 0.7)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid var(--color-hairline-soft)',
+        transition: 'background var(--transition-duration, 0.3s) ease',
+      }"
+    >
+      <div :style="{ display: 'flex', gap: '10px', alignItems: 'flex-start' }">
+        <img
+          :src="getIdenticonUrl(comment.user?.username || 'anonymous', comment.user?.avatar, 32)"
+          :style="{ width: '32px', height: '32px', borderRadius: '8px', flexShrink: 0 }"
+          alt=""
+        />
 
-      <NInput
-        v-if="isEditing"
-        v-model:value="editContent"
-        type="textarea"
-        :autosize="{ minRows: 2, maxRows: 6 }"
-        style="margin-bottom: 8px;"
-      />
-      <NText v-else style="font-size: 14px; line-height: 1.6; white-space: pre-wrap;">{{ comment.content }}</NText>
+        <div :style="{ flex: 1 }">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <NText strong style="font-size: 14px;">{{ comment.user?.username || '匿名' }}</NText>
+            <NTag v-if="comment.user?.role === 'admin'" type="error" size="tiny" :bordered="false">管理员</NTag>
+            <NText depth="3" style="font-size: 12px;">{{ formatDate(comment.created_at) }}</NText>
+          </div>
 
-      <div v-if="isEditing" style="display: flex; gap: 8px; margin-top: 8px;">
-        <NButton size="tiny" type="primary" @click="handleUpdate">保存</NButton>
-        <NButton size="tiny" @click="isEditing = false">取消</NButton>
-      </div>
-      <div v-else style="display: flex; gap: 8px; margin-top: 8px;">
-        <NButton v-if="auth.isLoggedIn" size="tiny" text @click="props.onReply(comment)">回复</NButton>
-        <template v-if="canModify(comment)">
-          <NButton size="tiny" text @click="startEdit">编辑</NButton>
-          <NPopconfirm @positive-click="handleDelete">
-            <template #trigger>
-              <NButton size="tiny" text type="error">删除</NButton>
+          <NInput
+            v-if="isEditing"
+            v-model:value="editContent"
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 6 }"
+            style="margin-bottom: 8px;"
+          />
+          <NText v-else style="font-size: 14px; line-height: 1.6; white-space: pre-wrap;">{{ comment.content }}</NText>
+
+          <div v-if="isEditing" style="display: flex; gap: 8px; margin-top: 8px;">
+            <NButton size="tiny" type="primary" @click="handleUpdate">保存</NButton>
+            <NButton size="tiny" @click="isEditing = false">取消</NButton>
+          </div>
+          <div v-else style="display: flex; gap: 8px; margin-top: 8px;">
+            <NButton v-if="auth.isLoggedIn" size="tiny" text @click="props.onReply(comment)">回复</NButton>
+            <template v-if="canModify(comment)">
+              <NButton size="tiny" text @click="startEdit">编辑</NButton>
+              <NPopconfirm @positive-click="handleDelete">
+                <template #trigger>
+                  <NButton size="tiny" text type="error">删除</NButton>
+                </template>
+                确定要删除这条评论吗？
+              </NPopconfirm>
             </template>
-            确定要删除这条评论吗？
-          </NPopconfirm>
-        </template>
+          </div>
+        </div>
       </div>
     </div>
 
