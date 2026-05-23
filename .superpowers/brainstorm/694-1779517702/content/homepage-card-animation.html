@@ -1,0 +1,67 @@
+<h2>首页卡片流动效 — 三种风格</h2>
+<p class="subtitle">文章卡片滚动入场的动画方式，配合已选的弹性 Hero</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>错落阶梯式</h3>
+      <p>卡片从下方上浮，每张延迟 0.1s 依次入场，形成自然的波浪节奏。鼠标悬停时卡片轻微上浮 + 阴影加深。干净克制</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>3D 倾斜跟随式</h3>
+      <p>卡片随鼠标位置倾斜（Tilt），有透视深度感。光晕跟随鼠标移动。滚动入场时带弹性位移。互动感极强</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>视差+揭幕式</h3>
+      <p>封面图有视差滚动效果，文字区域独立上浮。卡片进入视口时封面图先出现、文字随后淡入，层次分明</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header">A / B 卡片效果示意</div>
+      <div class="mockup-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px">
+          <div style="border-radius:12px;overflow:hidden;border:1px solid var(--border);transform:translateY(4px);transition:all 0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.06)">
+            <div style="aspect-ratio:1;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center"><span style="font-size:40px">💻</span></div>
+            <div style="padding:12px"><div style="font-size:13px;font-weight:600">React 19 新特性</div><div style="font-size:11px;color:var(--sub);margin-top:4px">2026/05</div></div>
+          </div>
+          <div style="border-radius:12px;overflow:hidden;border:1px solid var(--border);transform:translateY(12px);transition:all 0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.06)">
+            <div style="aspect-ratio:1;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center"><span style="font-size:40px">🎨</span></div>
+            <div style="padding:12px"><div style="font-size:13px;font-weight:600">Airbnb 设计系统</div><div style="font-size:11px;color:var(--sub);margin-top:4px">2026/05</div></div>
+          </div>
+        </div>
+        <p style="text-align:center;font-size:12px;color:var(--sub);margin-top:8px">左：已入场 ｜ 右：正在入场（偏移中）</p>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header">C 视差揭幕示意</div>
+      <div class="mockup-body">
+        <div style="border-radius:12px;overflow:hidden;border:1px solid var(--border)">
+          <div style="position:relative;aspect-ratio:1;overflow:hidden">
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#a18cd1,#fbc2eb);transform:translateY(-20%)"></div>
+            <div style="position:absolute;bottom:0;left:0;right:0;height:60%;background:linear-gradient(transparent,rgba(0,0,0,0.4))"></div>
+            <div style="position:absolute;bottom:12px;left:12px;font-size:40px">🐍</div>
+          </div>
+          <div style="padding:12px;background:white;position:relative;z-index:1">
+            <div style="font-size:13px;font-weight:600">Python 异步编程</div>
+            <div style="font-size:11px;color:var(--sub);margin-top:4px">封面图视差上移，文字区域独立层叠</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+:root { --border: #e5e5e5; --sub: #888; }
+</style>

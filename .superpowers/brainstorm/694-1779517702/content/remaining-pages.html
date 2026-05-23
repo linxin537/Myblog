@@ -1,0 +1,66 @@
+<h2>剩余页面动效 — 一次性确认</h2>
+<p class="subtitle">这些页面结构相对简单，可以统一方向。每个板块选择一个</p>
+
+<div class="section">
+  <h3>收藏页 / 草稿页（列表型页面）</h3>
+  <div class="options">
+    <div class="option" data-choice="list-a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>错落入场 + 悬停微动</h3>
+        <p>列表项从右侧滑入带 stagger 延迟。hover 时卡片轻微右移 + 阴影变化。空状态有呼吸动画的插画</p>
+      </div>
+    </div>
+    <div class="option" data-choice="list-b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>3D 卡片 + 滑动手势</h3>
+        <p>列表项有轻微 3D 倾斜（与首页一致），支持拖拽排序或滑动删除的弹性动画</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:28px">
+  <h3>登录页</h3>
+  <div class="options">
+    <div class="option" data-choice="login-a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>品牌仪式感</h3>
+        <p>表单从下方淡入，Logo 有弹性入场动画。输入框聚焦有光晕。登录按钮有加载脉冲。背景有缓慢移动的渐变色块</p>
+      </div>
+    </div>
+    <div class="option" data-choice="login-b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>极简轻量</h3>
+        <p>Logo 静态，表单直接显示。仅在登录按钮点击后有加载涟漪。不对未登录用户施加视觉压力</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:28px">
+  <h3>设置页 / 个人主页</h3>
+  <div class="options">
+    <div class="option" data-choice="settings-a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>有序逐现</h3>
+        <p>设置项从上到下依次淡入（stagger 0.05s）。开关切换有弹性动画。保存成功有绿色勾的弹跳确认</p>
+      </div>
+    </div>
+    <div class="option" data-choice="settings-b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>功能即动效</h3>
+        <p>不做装饰性动画。开关、滑块、按钮的交互反馈本身就是动效。头像上传有裁剪框弹性动画</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+:root { --sub: #888; --primary: #ff385c; }
+</style>

@@ -1,0 +1,55 @@
+<h2>文章编辑器 — 动效风格</h2>
+<p class="subtitle">编辑器是创作者花时间的页面，之前选了"科技感"。三种表达方式</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>聚焦写作模式</h3>
+      <p>进入页面时标题输入框轻微发光（品牌色光晕），光标聚焦动画。保存按钮有呼吸脉冲提示。Markdown 编辑区和预览切换有平滑翻转。干扰降到最低</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>终端黑客感</h3>
+      <p>标题输入框有打字机光标闪烁效果。标签选择有粒子吸附动画。发布按钮点击后有「发送」脉冲波纹。保存状态指示器有微妙的二进制雨背景</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>流畅创作体验</h3>
+      <p>所有交互有流畅的弹力过渡：工具栏 hover 放大、上传图片拖拽有吸入动画、保存成功有绿色波纹扩散、切换草稿/发布状态有丝滑的开关动画</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="mockup">
+    <div class="mockup-header">编辑器动效示意</div>
+    <div class="mockup-body" style="padding:20px;background:var(--bg);border-radius:12px">
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;font-weight:600;color:var(--sub);margin-bottom:4px">标题</div>
+        <div style="height:44px;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;padding:0 12px">
+          <span style="color:var(--sub)">输入文章标题...</span>
+          <span style="width:2px;height:18px;background:var(--primary);margin-left:2px;animation:blink 1s step-end infinite"></span>
+        </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;font-weight:600;color:var(--sub);margin-bottom:4px">内容</div>
+        <div style="height:120px;border:1px solid var(--border);border-radius:8px;background:var(--bg);padding:12px;color:var(--sub)">开始写作...</div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <div style="padding:8px 20px;border:1px solid var(--border);border-radius:8px;font-size:13px">保存草稿</div>
+        <div style="padding:8px 20px;background:linear-gradient(135deg,#ff385c,#e00b41);border-radius:8px;color:white;font-size:13px;font-weight:600;animation:pulse 2s ease infinite">发布</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,56,92,0.4); } 50% { box-shadow: 0 0 0 8px rgba(255,56,92,0); } }
+:root { --border: #e5e5e5; --sub: #888; --primary: #ff385c; --bg: #fff; }
+</style>

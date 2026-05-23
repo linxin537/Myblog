@@ -1,0 +1,57 @@
+<h2>页面切换动画 — 三种风格</h2>
+<p class="subtitle">路由跳转时的过渡效果，影响全局体验。之前 Transitions 已移除，现在用 GSAP 重新设计</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>淡入淡出 + 微位移</h3>
+      <p>离开页面 opacity → 0 + translateY(-8px)，进入页面 opacity → 1 + translateY(0)。简洁流畅，类似 iOS 导航过渡。约 350ms</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>方向性滑动</h3>
+      <p>根据导航方向决定动画：← 返回时右滑出、→ 前进时左滑入。列表→详情向上展开，详情→列表向下收回。有明确的空间感。约 400ms</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>缩放+淡变</h3>
+      <p>新页面从 0.95 scale 放大到 1，同时 opacity 淡入。旧页面缩小到 1.02 + 淡出。有「深入」或「回到」的层级感。约 400ms</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header">A: 淡入淡出+微位移</div>
+      <div class="mockup-body" style="padding:40px;text-align:center">
+        <div style="font-size:24px;font-weight:600;animation:fadeSlide 1.5s ease infinite both">首页 → 文章</div>
+        <div style="font-size:13px;color:var(--sub);margin-top:8px">opacity 0→1, Y:8px→0 / 350ms</div>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header">C: 缩放+淡变</div>
+      <div class="mockup-body" style="padding:40px;text-align:center">
+        <div style="font-size:24px;font-weight:600;animation:scaleFade 1.5s ease infinite both">深入阅读</div>
+        <div style="font-size:13px;color:var(--sub);margin-top:8px">scale 0.95→1 + fade / 400ms</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes fadeSlide {
+  0%, 100% { opacity: 0; transform: translateY(8px); }
+  40%, 80% { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleFade {
+  0%, 100% { opacity: 0; transform: scale(0.95); }
+  40%, 80% { opacity: 1; transform: scale(1); }
+}
+:root { --sub: #888; --primary: #ff385c; }
+</style>

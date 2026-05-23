@@ -37,7 +37,10 @@ async def upload_file(
     ext = os.path.splitext(file.filename or "image.png")[1].lower() or ".png"
     name = uuid.uuid4().hex
     date_dir = datetime.utcnow().strftime("%Y/%m")
-    rel_dir = os.path.join(settings.UPLOAD_DIR, date_dir)
+    # Resolve upload dir relative to backend root (not CWD)
+    backend_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    upload_base = os.path.join(backend_root, "static", "uploads")
+    rel_dir = os.path.join(upload_base, date_dir)
     os.makedirs(rel_dir, exist_ok=True)
 
     file_path = os.path.join(rel_dir, f"{name}{ext}")

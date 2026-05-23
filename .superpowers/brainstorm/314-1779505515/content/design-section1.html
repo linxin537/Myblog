@@ -1,0 +1,99 @@
+<h2>Section 1/4：CSS 设计令牌系统</h2>
+<p class="subtitle">新文件 <code>frontend/src/styles/airbnb.css</code>，替换 glassmorphism.css，覆盖亮/暗两套变量</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">☀️ 亮色模式 — :root 变量</div>
+    <div class="mockup-body">
+      <div style="background:#fff;padding:20px;border-radius:12px;font-size:13px;font-family:monospace;line-height:1.6;">
+        <div style="color:#6a6a6a;">/* Canvas & Surface */</div>
+        <div>--color-canvas: <span style="background:#fff;border:1px solid #ddd;padding:0 4px;">#ffffff</span>;</div>
+        <div>--color-surface-soft: <span style="background:#f7f7f7;padding:0 4px;">#f7f7f7</span>;</div>
+        <div>--color-surface-strong: <span style="background:#f2f2f2;padding:0 4px;">#f2f2f2</span>;</div>
+        <div style="margin-top:8px;color:#6a6a6a;">/* Brand */</div>
+        <div>--color-primary: <span style="background:#ff385c;color:#fff;padding:0 4px;">#ff385c</span>;</div>
+        <div>--color-primary-hover: <span style="background:#e00b41;color:#fff;padding:0 4px;">#e00b41</span>;</div>
+        <div style="margin-top:8px;color:#6a6a6a;">/* Text */</div>
+        <div>--color-ink: <span style="background:#222;color:#fff;padding:0 4px;">#222222</span>;</div>
+        <div>--color-body: <span style="background:#3f3f3f;color:#fff;padding:0 4px;">#3f3f3f</span>;</div>
+        <div>--color-muted: <span style="background:#6a6a6a;color:#fff;padding:0 4px;">#6a6a6a</span>;</div>
+        <div>--color-muted-soft: <span style="background:#929292;color:#fff;padding:0 4px;">#929292</span>;</div>
+        <div style="margin-top:8px;color:#6a6a6a;">/* Hairlines */</div>
+        <div>--color-hairline: <span style="background:#ddd;padding:0 4px;">#dddddd</span>;</div>
+        <div>--color-hairline-soft: <span style="background:#ebebeb;padding:0 4px;">#ebebeb</span>;</div>
+        <div style="margin-top:8px;color:#6a6a6a;">/* Shadow */</div>
+        <div style="font-size:11px;color:#929292;">--shadow-card: rgba(0,0,0,.02) 0 0 0 1px, rgba(0,0,0,.04) 0 2px 6px, rgba(0,0,0,.1) 0 4px 8px;</div>
+        <div style="margin-top:8px;color:#6a6a6a;">/* Radius */</div>
+        <div>--radius-sm: 8px; --radius-md: 14px;</div>
+        <div>--radius-lg: 16px; --radius-full: 9999px;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">🌙 暗色模式 — [data-theme="dark"]</div>
+    <div class="mockup-body">
+      <div style="background:#141414;padding:20px;border-radius:12px;font-size:13px;font-family:monospace;line-height:1.6;color:#e8e8e8;">
+        <div style="color:#999;">/* Canvas & Surface */</div>
+        <div>--color-canvas: <span style="background:#141414;border:1px solid #333;padding:0 4px;">#141414</span>;</div>
+        <div>--color-surface-soft: <span style="background:#1e1e1e;padding:0 4px;">#1e1e1e</span>;</div>
+        <div>--color-surface-strong: <span style="background:#2a2a2a;padding:0 4px;">#2a2a2a</span>;</div>
+        <div style="margin-top:8px;color:#999;">/* Brand */</div>
+        <div>--color-primary: <span style="background:#ff5a7a;color:#fff;padding:0 4px;">#ff5a7a</span>;</div>
+        <div>--color-primary-hover: <span style="background:#ff7a95;color:#000;padding:0 4px;">#ff7a95</span>;</div>
+        <div style="margin-top:8px;color:#999;">/* Text */</div>
+        <div>--color-ink: <span style="background:#e8e8e8;color:#000;padding:0 4px;">#e8e8e8</span>;</div>
+        <div>--color-body: <span style="background:#b0b0b0;color:#000;padding:0 4px;">#b0b0b0</span>;</div>
+        <div>--color-muted: <span style="background:#888;color:#000;padding:0 4px;">#888888</span>;</div>
+        <div style="margin-top:8px;color:#999;">/* Hairlines */</div>
+        <div>--color-hairline: <span style="background:#333;padding:0 4px;">#333333</span>;</div>
+        <div>--color-hairline-soft: <span style="background:#2a2a2a;padding:0 4px;">#2a2a2a</span>;</div>
+        <div style="margin-top:8px;color:#999;">/* Shadow */</div>
+        <div style="font-size:11px;color:#888;">--shadow-card: rgba(0,0,0,.3) 0 0 0 1px, rgba(0,0,0,.4) 0 2px 6px, rgba(0,0,0,.5) 0 4px 8px;</div>
+        <div style="margin-top:8px;color:#999;">/* Radius — 亮暗一致 */</div>
+        <div>--radius-sm: 8px; --radius-md: 14px;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>与 glassmorphism.css 的差异</h3>
+  <table style="width:100%;font-size:14px;border-collapse:collapse;">
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <th style="text-align:left;padding:8px 12px;color:#6a6a6a;">方面</th>
+      <th style="text-align:left;padding:8px 12px;color:#6a6a6a;">旧 (glassmorphism)</th>
+      <th style="text-align:left;padding:8px 12px;color:#6a6a6a;">新 (airbnb)</th>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;font-weight:600;">变量数</td>
+      <td style="padding:8px 12px;">~45 个</td>
+      <td style="padding:8px 12px;">~30 个（更精简）</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;font-weight:600;">品牌色</td>
+      <td style="padding:8px 12px;">3 色（teal/purple/pink）</td>
+      <td style="padding:8px 12px;">1 色（Rausch）</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;font-weight:600;">发光效果</td>
+      <td style="padding:8px 12px;">glow-teal/purple/pink 三种</td>
+      <td style="padding:8px 12px;">无（移除所有 glow）</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;font-weight:600;">backdrop-blur</td>
+      <td style="padding:8px 12px;">大量使用（毛玻璃核心）</td>
+      <td style="padding:8px 12px;">少量（仅导航栏/模态）</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;font-weight:600;">全局 class</td>
+      <td style="padding:8px 12px;">.glass / .glass-aurora / .aurora-bg</td>
+      <td style="padding:8px 12px;">.card / .card-hover（简洁）</td>
+    </tr>
+    <tr>
+      <td style="padding:8px 12px;font-weight:600;">字体</td>
+      <td style="padding:8px 12px;">DM Sans + Fraunces</td>
+      <td style="padding:8px 12px;">Inter（Google Fonts 替代）</td>
+    </tr>
+  </table>
+</div>

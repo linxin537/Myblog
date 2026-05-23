@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Editor } from '@bytemd/vue-next'
 import gfm from '@bytemd/plugin-gfm'
 import highlight from '@bytemd/plugin-highlight'
 import frontmatter from '@bytemd/plugin-frontmatter'
@@ -52,7 +53,7 @@ async function handleUploadImages(files: File[]) {
 }
 .markdown-editor .bytemd {
   height: 600px;
-  border: 1px solid var(--border-glass);
+  border: 1px solid var(--color-hairline-soft);
   border-radius: 12px;
   overflow: hidden;
 }

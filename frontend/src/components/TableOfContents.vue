@@ -78,17 +78,15 @@ onBeforeUnmount(() => {
   overflow-y: auto;
   padding: 18px;
   border-radius: 14px;
-  background: var(--bg-glass);
-  border: 1px solid var(--border-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline-soft);
 }
 
 .toc-link {
   display: block;
   padding: 5px 0 5px 10px;
   font-size: 13px;
-  color: var(--text-secondary);
+  color: var(--color-muted);
   text-decoration: none;
   border-left: 2px solid transparent;
   transition: color 0.25s ease, border-color 0.25s ease;
@@ -100,12 +98,12 @@ onBeforeUnmount(() => {
 }
 
 .toc-link:hover {
-  color: var(--aurora-teal);
+  color: var(--color-primary);
 }
 
 .toc-active {
-  color: var(--aurora-teal);
-  border-left-color: var(--aurora-teal);
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
   font-weight: 600;
 }
 

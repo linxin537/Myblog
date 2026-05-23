@@ -1,0 +1,87 @@
+<h2>首页 Hero 开场动画 — 三种风格</h2>
+<p class="subtitle">已确定：Hero + 卡片流组合。下面是 Hero 开场动画的三种视觉方向</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">A. 逐字浮现 · 优雅文学感</div>
+    <div class="mockup-body">
+      <div style="text-align:center;padding:60px 30px;background:var(--bg);border-radius:12px">
+        <div style="font-size:32px;font-weight:700;letter-spacing:-0.5px;line-height:1.4">
+          <span style="opacity:0;animation:fadeIn 0.4s forwards">用</span>
+          <span style="opacity:0;animation:fadeIn 0.4s 0.1s forwards">文</span>
+          <span style="opacity:0;animation:fadeIn 0.4s 0.2s forwards">字</span>
+          <span style="opacity:0;animation:fadeIn 0.4s 0.3s forwards">记</span>
+          <span style="opacity:0;animation:fadeIn 0.4s 0.4s forwards">录</span>
+          <span style="opacity:0;animation:fadeIn 0.4s 0.5s forwards">思</span>
+          <span style="opacity:0;animation:fadeIn 0.4s 0.6s forwards">考</span>
+        </div>
+        <div style="opacity:0;animation:fadeInUp 0.6s 0.8s forwards;font-size:15px;color:var(--sub);margin-top:12px">
+          分享技术见解与日常感悟
+        </div>
+        <div style="opacity:0;animation:fadeInUp 0.6s 1.0s forwards;margin-top:24px">
+          <div style="width:320px;height:44px;background:var(--border);border-radius:9999px;margin:0 auto"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mockup">
+    <div class="mockup-header">B. 几何装饰 · 现代设计感</div>
+    <div class="mockup-body">
+      <div style="text-align:center;padding:60px 30px;background:var(--bg);border-radius:12px;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-60px;right:-40px;width:160px;height:160px;border:1px solid var(--primary);border-radius:50%;opacity:0.15;animation:scaleIn 1s 0.3s both"></div>
+        <div style="position:absolute;bottom:-30px;left:-20px;width:100px;height:100px;border:1px solid var(--primary);border-radius:50%;opacity:0.1;animation:scaleIn 1s 0.5s both"></div>
+        <div style="font-size:32px;font-weight:700;letter-spacing:-0.5px;opacity:0;animation:fadeInUp 0.8s 0.2s forwards;position:relative">
+          用文字记录思考
+          <div style="position:absolute;top:-10px;right:-30px;width:14px;height:14px;background:var(--primary);border-radius:50%;opacity:0.7;animation:scaleIn 0.5s 0.8s both"></div>
+        </div>
+        <div style="opacity:0;animation:fadeInUp 0.6s 0.6s forwards;font-size:15px;color:var(--sub);margin-top:12px">
+          分享技术见解与日常感悟
+        </div>
+        <div style="opacity:0;animation:fadeInUp 0.6s 0.9s forwards;margin-top:24px">
+          <div style="width:320px;height:44px;background:var(--border);border-radius:9999px;margin:0 auto"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px">
+  <div class="mockup">
+    <div class="mockup-header">C. 弹性入场 · 活泼潮酷感</div>
+    <div class="mockup-body">
+      <div style="text-align:center;padding:60px 30px;background:var(--bg);border-radius:12px;overflow:hidden">
+        <div style="font-size:32px;font-weight:700;letter-spacing:-0.5px;opacity:0;animation:bounceIn 0.8s 0.2s forwards">
+          用文字记录思考
+        </div>
+        <div style="opacity:0;animation:fadeInUp 0.5s 0.5s forwards;font-size:15px;color:var(--sub);margin-top:12px">
+          分享技术见解与日常感悟
+        </div>
+        <div style="opacity:0;animation:bounceIn 0.6s 0.7s forwards;margin-top:24px">
+          <div style="width:320px;height:44px;background:var(--border);border-radius:9999px;margin:0 auto"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes bounceIn {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+:root { --bg: #fafafa; --border: #e5e5e5; --primary: #ff385c; --sub: #888; }
+</style>

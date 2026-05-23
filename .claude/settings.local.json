@@ -45,7 +45,30 @@
       "Bash(git commit *)",
       "PowerShell(gh auth *)",
       "Bash(git remote *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(npx skills *)",
+      "WebFetch(domain:aihot.virxact.com)",
+      "Bash(codegraph init *)",
+      "mcp__codegraph__codegraph_files",
+      "Bash(bash *)",
+      "Bash(xargs cat)",
+      "Bash(New-Item *)",
+      "PowerShell(git *)",
+      "Bash(Test-Path C:\\\\Mywebsite_2\\\\frontend\\\\src\\\\styles *)",
+      "Bash(git *)",
+      "Bash(Remove-Item *)",
+      "Read(//mnt/c/Mywebsite_2/**)",
+      "Bash(npx tsc *)",
+      "Bash(Select-Object -First 40)",
+      "Bash(Select-Object -First 50)",
+      "Bash(cd C:Mywebsite_2frontend *)",
+      "Bash(npm ls *)",
+      "Bash(npx vite *)",
+      "Bash(/bin/bash *)",
+      "Bash(Start-Sleep -Seconds 2)",
+      "Bash(Select-Object FullName)",
+      "Bash(Co-Authored-By: Claude Opus 4.7)",
+      "PowerShell(npx vue-tsc --noEmit 2>&1 | Select-Object -First 60)"
     ]
   }
 }

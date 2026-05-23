@@ -1,0 +1,93 @@
+<h2>博客动效设计 · 完整方案总览</h2>
+<p class="subtitle">基于 Airbnb 极简风格 + GSAP 驱动 · 性能平衡 · 融合型风格</p>
+
+<div class="section">
+  <h3>全局基础设施</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <span class="label">页面过渡</span>
+      <p style="font-size:13px;margin:4px 0 0">淡入淡出 + 微位移 · 350ms</p>
+    </div>
+    <div style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <span class="label">导航栏</span>
+      <p style="font-size:13px;margin:4px 0 0">滚动变形 80→56px · 毛玻璃</p>
+    </div>
+    <div style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <span class="label">滚动系统</span>
+      <p style="font-size:13px;margin:4px 0 0">统一 ScrollTrigger 揭示 · stagger</p>
+    </div>
+    <div style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <span class="label">光标效果</span>
+      <p style="font-size:13px;margin:4px 0 0">自定义光标 + 点击涟漪波纹</p>
+    </div>
+    <div style="padding:12px;border:1px solid var(--border);border-radius:8px;grid-column:1/-1">
+      <span class="label">视差层</span>
+      <p style="font-size:13px;margin:4px 0 0">多速滚动 · 纵深层次感 · Hero 区 + 文章封面</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px">
+  <h3>页面动效矩阵</h3>
+  <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <tr style="border-bottom:1px solid var(--border)">
+        <th style="text-align:left;padding:8px">页面</th>
+        <th style="text-align:left;padding:8px">风格调性</th>
+        <th style="text-align:left;padding:8px">核心动效</th>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px;font-weight:600">首页</td>
+        <td style="padding:8px">潮酷吸睛</td>
+        <td style="padding:8px">Hero 弹性入场 · 3D 卡片 Tilt · 光晕跟随</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px;font-weight:600">文章详情</td>
+        <td style="padding:8px">温暖沉浸</td>
+        <td style="padding:8px">阅读进度条 · ToC 追踪 · 封面视差 · 粒子点赞</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px;font-weight:600">编辑器</td>
+        <td style="padding:8px">科技流畅</td>
+        <td style="padding:8px">弹力过渡 · 拖拽吸入 · 保存波纹 · 开关动画</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px;font-weight:600">收藏 / 草稿</td>
+        <td style="padding:8px">潮酷</td>
+        <td style="padding:8px">3D 卡片倾斜 · 滑动删除弹性 · 空状态动画</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px;font-weight:600">登录</td>
+        <td style="padding:8px">品牌仪式</td>
+        <td style="padding:8px">Logo 弹性入场 · 输入框光晕 · 渐变色块背景</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;font-weight:600">设置 / 主页</td>
+        <td style="padding:8px">克制实用</td>
+        <td style="padding:8px">开关弹性 · 保存确认弹跳 · 头像裁剪动画</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px">
+  <h3>技术选型</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
+    <div style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <span class="label">核心库</span>
+      <p style="margin:4px 0 0">GSAP + ScrollTrigger + Flip</p>
+    </div>
+    <div style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <span class="label">性能策略</span>
+      <p style="margin:4px 0 0">transform/opacity 优先 · will-change · 低端降级</p>
+    </div>
+  </div>
+</div>
+
+<p style="text-align:center;margin-top:24px;font-size:14px;color:var(--primary);font-weight:600">← 以上方案确认后写入设计规格文档</p>
+
+<style>
+:root { --border: #e5e5e5; --sub: #888; --primary: #ff385c; --bg: #fff; }
+table { font-family: inherit; }
+th { font-size:11px; color: var(--sub); text-transform:uppercase; letter-spacing:0.5px; }
+</style>

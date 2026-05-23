@@ -1,0 +1,100 @@
+<h2>Section 4/4：改造总览 & 实施清单</h2>
+<p class="subtitle">完整文件变更列表和实施顺序</p>
+
+<div class="section">
+  <h3>📋 文件变更清单（共 4 层）</h3>
+
+  <div style="background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:20px;margin-bottom:12px;">
+    <h4 style="margin:0 0 8px;color:#ff385c;">Layer 1：设计令牌（新建 2 + 修改 4）</h4>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;">
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">新建</td><td style="padding:4px 8px;"><code>frontend/src/styles/airbnb.css</code></td><td style="padding:4px 8px;color:#6a6a6a;">CSS 变量 · 亮/暗双模式 · 全局重置</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">新建</td><td style="padding:4px 8px;"><code>frontend/src/utils/identicon.ts</code></td><td style="padding:4px 8px;color:#6a6a6a;">hash 头像生成器 · 调色板 · 几何图形集</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">新建</td><td style="padding:4px 8px;"><code>frontend/src/utils/covers.ts</code></td><td style="padding:4px 8px;color:#6a6a6a;">标签→封面映射表 · 渐变色 + 图标 + 比例</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>frontend/src/main.ts</code></td><td style="padding:4px 8px;color:#6a6a6a;">glassmorphism.css → airbnb.css</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>frontend/src/App.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">themeOverrides 重写</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>frontend/index.html</code></td><td style="padding:4px 8px;color:#6a6a6a;">Google Fonts: Inter 替换 DM Sans + Fraunces</td></tr>
+      <tr><td style="padding:4px 8px;font-weight:600;">删除</td><td style="padding:4px 8px;"><code>frontend/src/styles/glassmorphism.css</code></td><td style="padding:4px 8px;color:#6a6a6a;">退役毛玻璃样式</td></tr>
+    </table>
+  </div>
+
+  <div style="background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:20px;margin-bottom:12px;">
+    <h4 style="margin:0 0 8px;color:#ff385c;">Layer 2：布局组件（修改 1）</h4>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;">
+      <tr><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>frontend/src/components/AppLayout.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">白底 nav · 80px 高 · 底部分割线 · 居中导航 · 移除毛玻璃</td></tr>
+    </table>
+  </div>
+
+  <div style="background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:20px;margin-bottom:12px;">
+    <h4 style="margin:0 0 8px;color:#ff385c;">Layer 3：通用组件（修改 5）</h4>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;">
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>ArticleCard.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">Photo-first · 1:1 封面 · 标签默认图 · 14px 圆角</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>ArticleCardSkeleton.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">匹配新卡片骨架屏</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>CommentItem.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">集成 identicon 头像</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>CommentSection.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">评论输入框带用户头像</td></tr>
+      <tr><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>GlassCard.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">重命名为 Card 组件 · 白底 + hairline</td></tr>
+    </table>
+  </div>
+
+  <div style="background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:20px;">
+    <h4 style="margin:0 0 8px;color:#ff385c;">Layer 4：页面视图（修改 10）</h4>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;">
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>HomeView.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">白底 Hero · 搜索 pill · 卡片网格 · 移除渐变</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>ArticleDetail.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">双栏布局 · 侧边栏 sticky · 作者头像</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>ArticleEditor.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">干净表单 · Stacked labels · 8px 圆角</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>LoginView.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">极简居中表单 · 移除玻璃卡片</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>ProfileView.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">头像顶部 · 统计横排 · 文章卡片网格</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>FavoritesView.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">卡片网格 · Tab pill 切换</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>DraftsView.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">卡片网格 · Tab pill 切换</td></tr>
+      <tr style="border-bottom:1px solid #f2f2f2;"><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>SettingsView.vue</code></td><td style="padding:4px 8px;color:#6a6a6a;">Stacked labels · 8px 圆角输入框</td></tr>
+      <tr><td style="padding:4px 8px;font-weight:600;">修改</td><td style="padding:4px 8px;"><code>admin/*.vue</code> (4个)</td><td style="padding:4px 8px;color:#6a6a6a;">清爽表格 · 分页器 · 用户头像列</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🔧 新增工具模块</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:16px;">
+      <h4 style="margin:0 0 8px;">identicon.ts — 头像生成器</h4>
+      <ul style="margin:0;padding-left:16px;font-size:13px;color:#3f3f3f;line-height:1.8;">
+        <li>hash(username) → 确定性几何头像</li>
+        <li>5×5 网格对称图案 (GitHub style)</li>
+        <li>12 色调色板</li>
+        <li>输出 SVG Data URI</li>
+        <li>支持自定义上传覆盖</li>
+      </ul>
+    </div>
+    <div style="background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:16px;">
+      <h4 style="margin:0 0 8px;">covers.ts — 封面映射表</h4>
+      <ul style="margin:0;padding-left:16px;font-size:13px;color:#3f3f3f;line-height:1.8;">
+        <li>tag → { gradient, icon, iconSize }</li>
+        <li>图标占比 ~30%（更和谐比例）</li>
+        <li>预置 ~15 种标签风格</li>
+        <li>未匹配标签用通用默认图</li>
+        <li>输出 CSS gradient string</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📊 改动统计</h3>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;">
+    <div style="flex:1;min-width:120px;background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:20px;text-align:center;">
+      <div style="font-size:36px;font-weight:700;color:#ff385c;">3</div>
+      <div style="color:#6a6a6a;font-size:13px;">新建文件</div>
+    </div>
+    <div style="flex:1;min-width:120px;background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:20px;text-align:center;">
+      <div style="font-size:36px;font-weight:700;color:#222;">17</div>
+      <div style="color:#6a6a6a;font-size:13px;">修改文件</div>
+    </div>
+    <div style="flex:1;min-width:120px;background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:20px;text-align:center;">
+      <div style="font-size:36px;font-weight:700;color:#222;">1</div>
+      <div style="color:#6a6a6a;font-size:13px;">删除文件</div>
+    </div>
+    <div style="flex:1;min-width:120px;background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:20px;text-align:center;">
+      <div style="font-size:36px;font-weight:700;color:#222;">10</div>
+      <div style="color:#6a6a6a;font-size:13px;">页面视图改造</div>
+    </div>
+  </div>
+</div>

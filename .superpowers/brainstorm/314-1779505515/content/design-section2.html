@@ -1,0 +1,135 @@
+<h2>Section 2/4：Naive UI ThemeOverrides 映射</h2>
+<p class="subtitle">在 App.vue 中更新 lightThemeOverrides / darkThemeOverrides，将 Naive 组件原生样式对齐 Airbnb 令牌</p>
+
+<div class="section">
+  <h3>核心覆盖项</h3>
+  <table style="width:100%;font-size:14px;border-collapse:collapse;">
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <th style="text-align:left;padding:8px 12px;color:#6a6a6a;">Naive Token</th>
+      <th style="text-align:left;padding:8px 12px;color:#6a6a6a;">亮色值</th>
+      <th style="text-align:left;padding:8px 12px;color:#6a6a6a;">暗色值</th>
+      <th style="text-align:left;padding:8px 12px;color:#6a6a6a;">说明</th>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;background:#fafafa;">
+      <td colspan="4" style="padding:8px 12px;font-weight:700;color:#6a6a6a;">Common（全局）</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">primaryColor</td>
+      <td style="padding:8px 12px;"><span style="background:#ff385c;color:#fff;padding:2px 8px;border-radius:4px;">#ff385c</span></td>
+      <td style="padding:8px 12px;"><span style="background:#ff5a7a;color:#fff;padding:2px 8px;border-radius:4px;">#ff5a7a</span></td>
+      <td style="padding:8px 12px;color:#6a6a6a;">Rausch 替换原 teal</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">primaryColorHover</td>
+      <td style="padding:8px 12px;">#e00b41</td>
+      <td style="padding:8px 12px;">#ff7a95</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">Rausch Active</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">borderRadius</td>
+      <td style="padding:8px 12px;">8px</td>
+      <td style="padding:8px 12px;">8px</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">原 12px → 8px（Airbnb 更小）</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">fontFamily</td>
+      <td style="padding:8px 12px;" colspan="2">Inter, -apple-system, "PingFang SC"...</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">Inter 替代 DM Sans</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">textColor1</td>
+      <td style="padding:8px 12px;">#222222</td>
+      <td style="padding:8px 12px;">#e8e8e8</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">Ink 色</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">textColor2</td>
+      <td style="padding:8px 12px;">#3f3f3f</td>
+      <td style="padding:8px 12px;">#b0b0b0</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">Body 色</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">textColor3</td>
+      <td style="padding:8px 12px;">#6a6a6a</td>
+      <td style="padding:8px 12px;">#888888</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">Muted 色</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;background:#fafafa;">
+      <td colspan="4" style="padding:8px 12px;font-weight:700;color:#6a6a6a;">Button</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">borderRadiusMedium</td>
+      <td style="padding:8px 12px;">8px</td>
+      <td style="padding:8px 12px;">8px</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">原 980px pill → 8px</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">heightMedium</td>
+      <td style="padding:8px 12px;">40px</td>
+      <td style="padding:8px 12px;">40px</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">接近 48px Airbnb 规格</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;background:#fafafa;">
+      <td colspan="4" style="padding:8px 12px;font-weight:700;color:#6a6a6a;">Input</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">borderRadius</td>
+      <td style="padding:8px 12px;">8px</td>
+      <td style="padding:8px 12px;">8px</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">匹配 button 圆角</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">heightLarge</td>
+      <td style="padding:8px 12px;">48px</td>
+      <td style="padding:8px 12px;">48px</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">接近 Airbnb 56px</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;background:#fafafa;">
+      <td colspan="4" style="padding:8px 12px;font-weight:700;color:#6a6a6a;">Tag</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ebebeb;">
+      <td style="padding:8px 12px;">borderRadius</td>
+      <td style="padding:8px 12px;">8px</td>
+      <td style="padding:8px 12px;">8px</td>
+      <td style="padding:8px 12px;color:#6a6a6a;">统一圆角</td>
+    </tr>
+  </table>
+</div>
+
+<div class="section">
+  <h3>按钮风格变化预览</h3>
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header">旧 — Pill 按钮 (980px 圆角, Teal)</div>
+      <div class="mockup-body" style="background:#080812;padding:24px;border-radius:12px;">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="background:#2dd4bf;color:#000;padding:10px 24px;border-radius:980px;display:inline-block;font-size:14px;font-weight:500;">Primary</div>
+          <div style="background:transparent;color:#2dd4bf;padding:10px 24px;border-radius:980px;border:1px solid #2dd4bf;display:inline-block;font-size:14px;">Secondary</div>
+          <div style="color:#a5a3b8;padding:10px 16px;display:inline-block;font-size:14px;">Text</div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header">新 — 8px 圆角, Rausch</div>
+      <div class="mockup-body" style="background:#fff;padding:24px;border-radius:12px;">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="background:#ff385c;color:#fff;padding:10px 24px;border-radius:8px;display:inline-block;font-size:14px;font-weight:500;">Primary</div>
+          <div style="background:#fff;color:#222;padding:10px 24px;border-radius:8px;border:1px solid #222;display:inline-block;font-size:14px;font-weight:500;">Secondary</div>
+          <div style="color:#222;padding:10px 16px;display:inline-block;font-size:14px;font-weight:500;">Text</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>关键变化总结</h3>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;">
+    <span style="background:#f7f7f7;padding:8px 16px;border-radius:8px;font-size:13px;">Button 圆角: 980px → 8px</span>
+    <span style="background:#f7f7f7;padding:8px 16px;border-radius:8px;font-size:13px;">品牌色: #2dd4bf → #ff385c</span>
+    <span style="background:#f7f7f7;padding:8px 16px;border-radius:8px;font-size:13px;">全局圆角: 12px → 8px</span>
+    <span style="background:#f7f7f7;padding:8px 16px;border-radius:8px;font-size:13px;">字体: DM Sans → Inter</span>
+    <span style="background:#f7f7f7;padding:8px 16px;border-radius:8px;font-size:13px;">输入框高: 自适应 → 48px</span>
+    <span style="background:#fff;padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid #ff385c;color:#ff385c;">Search bar: 保留 pill 形</span>
+  </div>
+</div>

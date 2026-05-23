@@ -1,0 +1,63 @@
+<h2>文章详情页 — 阅读辅助动效（已选 A 方向）</h2>
+<p class="subtitle">在阅读辅助型基础上细化：进度条、ToC 追踪、内容揭示。三种具体表达方式</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>极简功能型</h3>
+      <p>顶部 2px 细线进度条（品牌色），ToC 当前项平滑高亮+自动滚动，图片/代码块滚动进入时轻淡入。纯粹辅助，不干扰阅读</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>有温度引导型</h3>
+      <p>进度条 + ToC 基础上，长文章在特定位置有小提示动画（比如读到 50% 时点赞按钮轻弹），图片有优雅的遮罩揭幕效果</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>沉浸联动型</h3>
+      <p>进度条 + ToC + 封面图视差 + 滚动到评论区时评论数计数器滚动动画 + 点赞有粒子爆发。每个区域都是独立的小舞台</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="mockup">
+    <div class="mockup-header">阅读进度示意 — 顶部细线 + 右侧 ToC 高亮追踪</div>
+    <div class="mockup-body">
+      <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <div style="height:3px;background:#eee">
+          <div style="height:100%;width:35%;background:var(--primary);border-radius:0 2px 2px 0;transition:width 0.3s"></div>
+        </div>
+        <div style="display:flex">
+          <div style="flex:1;padding:24px;max-height:300px;overflow:hidden">
+            <div style="font-size:20px;font-weight:700;margin-bottom:8px">React 19 新特性解读</div>
+            <div style="font-size:12px;color:var(--sub);margin-bottom:20px">2026/05 · 1,234 阅读</div>
+            <div style="font-size:13px;line-height:1.8;color:var(--text)">
+              <p style="opacity:0.9">随着 React 19 的正式发布，许多令人兴奋的新特性终于来了...</p>
+              <p style="opacity:0.7;font-weight:600;margin-top:16px;border-left:3px solid var(--primary);padding-left:12px">React Compiler 自动记忆化</p>
+              <p style="opacity:0.5">在今年的大会上，React 团队宣布了...</p>
+              <p style="opacity:0.4">Server Components ...</p>
+              <p style="opacity:0.3">Actions ...</p>
+            </div>
+          </div>
+          <div style="width:160px;padding:16px;border-left:1px solid var(--border);font-size:11px">
+            <div style="font-weight:600;color:var(--sub);margin-bottom:8px">目录</div>
+            <div style="padding:4px 0;color:var(--sub)">概览</div>
+            <div style="padding:4px 0;color:var(--primary);font-weight:600;border-left:2px solid var(--primary);padding-left:8px;margin-left:-8px">React Compiler</div>
+            <div style="padding:4px 0;color:var(--sub);padding-left:8px">Server Components</div>
+            <div style="padding:4px 0;color:var(--sub);padding-left:8px">Actions API</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+:root { --border: #e5e5e5; --sub: #888; --primary: #ff385c; --text: #333; --bg: #fff; }
+</style>

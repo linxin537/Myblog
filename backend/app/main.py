@@ -48,7 +48,7 @@ app.add_middleware(
 if not os.environ.get("TESTING"):
     app.add_middleware(RateLimitMiddleware, requests_per_minute=120)
 
-static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+static_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 app.include_router(auth_router, prefix="/api/v1")

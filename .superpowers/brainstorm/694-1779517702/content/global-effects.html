@@ -1,0 +1,48 @@
+<h2>全局动效元素 — 多选</h2>
+<p class="subtitle">这些效果贯穿所有页面，为整个博客定调。选择一个或多个</p>
+
+<div class="options" data-multiselect>
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>导航栏滚动变形</h3>
+      <p>滚动时导航栏从 80px 缩减到 56px，Logo 略微缩小，背景从透明变为半透明毛玻璃。干净实用</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>统一滚动揭示系统</h3>
+      <p>所有页面的内容区域使用统一的 GSAP ScrollTrigger 揭示：从下方 30px 淡入上浮，stagger 延迟。类似 Apple 产品页</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>自定义光标/点击波纹</h3>
+      <p>鼠标光标替换为自定义样式（小圆点或环形），点击时有涟漪扩散效果。视觉冲击力强，适合潮酷风格</p>
+    </div>
+  </div>
+  <div class="option" data-choice="d" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>全局粒子背景</h3>
+      <p>Canvas 驱动的低密度粒子网络，粒子之间有微弱的连线，随鼠标位置轻微移动。科技感+深度感</p>
+    </div>
+  </div>
+  <div class="option" data-choice="e" onclick="toggleSelect(this)">
+    <div class="letter">E</div>
+    <div class="content">
+      <h3>视差滚动层</h3>
+      <p>不同内容元素以不同速度响应滚动，创建纵深感和层次感。适合 Hero 和文章封面区域</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <p class="subtitle" style="margin-top:16px">已确认的组合预览：弹性 Hero(B) + 3D 卡片倾斜(B) + 沉浸阅读(C) + 淡入过渡(A)</p>
+</div>
+
+<style>
+:root { --sub: #888; --primary: #ff385c; }
+</style>

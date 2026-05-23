@@ -1,0 +1,161 @@
+<h2>Section 3/4：页面级改造计划（中）— 详情 & 编辑</h2>
+<p class="subtitle">文章详情双栏布局、编辑器简化、登录页改造</p>
+
+<div class="section">
+  <h3>4. ArticleDetail — 文章详情页</h3>
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header">当前：单栏 + 毛玻璃</div>
+      <div class="mockup-body" style="background:#080812;padding:16px;border-radius:12px;font-size:12px;">
+        <div style="background:rgba(16,16,40,0.55);padding:20px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);">
+          <div style="color:#6b6980;font-size:11px;">分类 > 标签</div>
+          <div style="color:#edecf2;font-size:22px;font-weight:700;margin:8px 0;">文章标题</div>
+          <div style="color:#a5a3b8;font-size:11px;">作者 · 日期 · 阅读</div>
+          <div style="height:4px;background:rgba(255,255,255,0.04);margin:16px 0;"></div>
+          <div style="color:#edecf2;line-height:1.8;">这是文章正文内容，单栏布局占据全宽...</div>
+          <div style="display:flex;gap:8px;margin-top:16px;">
+            <span style="background:rgba(45,212,191,0.15);color:#2dd4bf;padding:4px 12px;border-radius:12px;">👍 12</span>
+            <span style="background:rgba(167,139,250,0.15);color:#a78bfa;padding:4px 12px;border-radius:12px;">⭐ 收藏</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header">目标：双栏 + 侧边栏</div>
+      <div class="mockup-body" style="background:#fff;padding:16px;border-radius:12px;font-size:12px;">
+        <div style="display:flex;gap:24px;">
+          <div style="flex:1;">
+            <div style="color:#6a6a6a;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">分类 · 标签</div>
+            <div style="color:#222;font-size:22px;font-weight:600;margin:12px 0;">文章标题</div>
+            <div style="display:flex;gap:16px;align-items:center;margin-bottom:24px;">
+              <span style="width:32px;height:32px;background:#f7f7f7;border-radius:50%;"></span>
+              <span style="color:#222;font-size:13px;">作者</span>
+              <span style="color:#6a6a6a;font-size:12px;">2026-05-23</span>
+              <span style="color:#6a6a6a;font-size:12px;">100 阅读</span>
+            </div>
+            <div style="color:#3f3f3f;line-height:1.8;font-size:14px;">这是文章正文内容，左侧主内容区域占 ~64% 宽度...</div>
+          </div>
+          <div style="width:280px;flex-shrink:0;">
+            <div style="border:1px solid #ebebeb;border-radius:14px;padding:20px;position:sticky;top:100px;box-shadow:rgba(0,0,0,0.04) 0 2px 6px;">
+              <div style="font-size:20px;font-weight:700;color:#222;">目录</div>
+              <div style="color:#6a6a6a;font-size:12px;margin-top:12px;">· 第一章</div>
+              <div style="color:#6a6a6a;font-size:12px;">· 第二章</div>
+              <div style="color:#6a6a6a;font-size:12px;">· 第三章</div>
+              <div style="height:1px;background:#ebebeb;margin:16px 0;"></div>
+              <div style="display:flex;gap:8px;">
+                <span style="background:#f7f7f7;padding:6px 12px;border-radius:8px;font-size:12px;color:#222;">👍 12</span>
+                <span style="background:#f7f7f7;padding:6px 12px;border-radius:8px;font-size:12px;color:#222;">⭐ 收藏</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="color:#6a6a6a;font-size:13px;margin-top:8px;"><strong>改动：</strong>单栏 → 双栏（内容 64% + 侧边 32%），侧边栏 sticky 定位含目录和操作按钮，移除玻璃卡片，正文使用 body 色而非纯黑</p>
+</div>
+
+<div class="section">
+  <h3>5. ArticleEditor — 编辑器</h3>
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header">当前：玻璃卡片表单</div>
+      <div class="mockup-body" style="background:#080812;padding:16px;border-radius:12px;font-size:12px;">
+        <div style="background:rgba(16,16,40,0.55);padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);margin-bottom:8px;">
+          <div style="color:#a5a3b8;font-size:11px;">标题</div>
+          <div style="background:rgba(16,16,40,0.48);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;color:#6b6980;margin-top:4px;">输入文章标题...</div>
+        </div>
+        <div style="background:rgba(16,16,40,0.55);padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);margin-bottom:8px;">
+          <div style="color:#a5a3b8;font-size:11px;">内容</div>
+          <div style="background:rgba(16,16,40,0.48);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;color:#6b6980;margin-top:4px;height:100px;">Markdown 编辑区域...</div>
+        </div>
+        <div style="background:rgba(16,16,40,0.55);padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);">
+          <span style="background:#2dd4bf;color:#000;padding:6px 20px;border-radius:980px;font-size:12px;">发布</span>
+        </div>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header">目标：干净表单布局</div>
+      <div class="mockup-body" style="background:#fff;padding:16px;border-radius:12px;font-size:12px;">
+        <div style="margin-bottom:20px;">
+          <div style="color:#222;font-weight:600;font-size:13px;margin-bottom:6px;">标题</div>
+          <div style="border:1px solid #ddd;border-radius:8px;padding:12px 14px;color:#929292;font-size:14px;">输入文章标题...</div>
+        </div>
+        <div style="margin-bottom:20px;">
+          <div style="color:#222;font-weight:600;font-size:13px;margin-bottom:6px;">内容</div>
+          <div style="border:1px solid #ddd;border-radius:8px;padding:12px 14px;color:#929292;font-size:14px;height:120px;">Markdown 编辑区域...</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div style="display:flex;gap:8px;flex:1;">
+            <span style="background:#f7f7f7;padding:6px 12px;border-radius:8px;font-size:11px;color:#6a6a6a;border:1px solid #ebebeb;">分类 ▼</span>
+            <span style="background:#f7f7f7;padding:6px 12px;border-radius:8px;font-size:11px;color:#6a6a6a;border:1px solid #ebebeb;">标签 ▼</span>
+          </div>
+          <span style="background:#ff385c;color:#fff;padding:10px 28px;border-radius:8px;font-size:13px;font-weight:500;">发布</span>
+          <span style="color:#222;font-size:13px;border:1px solid #222;padding:10px 20px;border-radius:8px;">存草稿</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="color:#6a6a6a;font-size:13px;margin-top:8px;"><strong>改动：</strong>移除所有 glass 卡片包裹，表单元素直接平铺在白底上，input 用 1px hairline + 8px 圆角，按钮用 Rausch primary + Ink outline secondary</p>
+</div>
+
+<div class="section">
+  <h3>6. LoginView — 登录/注册</h3>
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header">当前：居中玻璃卡片</div>
+      <div class="mockup-body" style="background:#080812;padding:24px;border-radius:12px;display:flex;justify-content:center;">
+        <div style="background:rgba(16,16,40,0.55);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:40px;width:380px;text-align:center;">
+          <div style="color:#edecf2;font-size:24px;font-weight:700;">登录</div>
+          <div style="background:rgba(16,16,40,0.48);border:1px solid rgba(255,255,255,0.08);border-radius:980px;padding:12px;color:#6b6980;margin-top:16px;">用户名</div>
+          <div style="background:rgba(16,16,40,0.48);border:1px solid rgba(255,255,255,0.08);border-radius:980px;padding:12px;color:#6b6980;margin-top:8px;">密码</div>
+          <div style="background:#2dd4bf;color:#000;padding:12px;border-radius:980px;margin-top:16px;font-weight:500;">登录</div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header">目标：极简居中表单</div>
+      <div class="mockup-body" style="background:#fff;padding:24px;border-radius:12px;display:flex;justify-content:center;">
+        <div style="width:360px;padding:48px 0;">
+          <div style="font-size:24px;font-weight:700;color:#222;">登录</div>
+          <div style="color:#6a6a6a;font-size:14px;margin-top:4px;">欢迎回来</div>
+          <div style="margin-top:32px;">
+            <div style="color:#222;font-weight:500;font-size:13px;margin-bottom:6px;">用户名</div>
+            <div style="border:1px solid #ddd;border-radius:8px;padding:14px;color:#929292;font-size:14px;">输入用户名</div>
+          </div>
+          <div style="margin-top:16px;">
+            <div style="color:#222;font-weight:500;font-size:13px;margin-bottom:6px;">密码</div>
+            <div style="border:1px solid #ddd;border-radius:8px;padding:14px;color:#929292;font-size:14px;">输入密码</div>
+          </div>
+          <div style="background:#ff385c;color:#fff;padding:14px;border-radius:8px;text-align:center;margin-top:24px;font-weight:500;font-size:15px;">登录</div>
+          <div style="text-align:center;color:#6a6a6a;font-size:13px;margin-top:16px;">还没有账号？<span style="color:#ff385c;font-weight:500;">注册</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="color:#6a6a6a;font-size:13px;margin-top:8px;"><strong>改动：</strong>移除玻璃卡片包裹，表单直接居中在白底上，输入框从 pill 改为 8px 圆角，标签在输入框上方（stacked label），链接用 Rausch 色</p>
+</div>
+
+<div class="section" style="background:#fef3f5;border:1px solid #ffd1da;border-radius:12px;padding:16px;">
+  <h3 style="margin:0 0 8px;color:#ff385c;">💡 新特性：标签 → 默认配图映射</h3>
+  <p style="color:#3f3f3f;font-size:14px;margin:0;">文章没有封面图时，根据标签自动分配不同的默认配图。不同标签 = 不同风格的渐变/图案。</p>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;">
+    <div style="text-align:center;">
+      <div style="aspect-ratio:1;border-radius:12px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;">💻</div>
+      <div style="font-size:11px;color:#6a6a6a;margin-top:4px;">编程 / 技术</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="aspect-ratio:1;border-radius:12px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;">🎨</div>
+      <div style="font-size:11px;color:#6a6a6a;margin-top:4px;">设计 / 创意</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="aspect-ratio:1;border-radius:12px;background:linear-gradient(135deg,#4facfe,#00f2fe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;">📝</div>
+      <div style="font-size:11px;color:#6a6a6a;margin-top:4px;">随笔 / 生活</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="aspect-ratio:1;border-radius:12px;background:linear-gradient(135deg,#43e97b,#38f9d7);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;">🚀</div>
+      <div style="font-size:11px;color:#6a6a6a;margin-top:4px;">产品 / 创业</div>
+    </div>
+  </div>
+  <p style="color:#6a6a6a;font-size:12px;margin-top:12px;"><strong>实现方案：</strong>前端维护一个 <code>tagImageMap</code> — 根据标签名匹配预定义的渐变色 + 图标。文章有多个标签时取第一个匹配的。无标签时使用通用默认图。</p>
+</div>
