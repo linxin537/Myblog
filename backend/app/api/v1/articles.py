@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.user import User, UserRole
 from app.models.article import Article, article_tags, article_likes, article_favorites
+from app.models.notification import Notification, NotificationType
 from app.models.tag import Tag
 from app.schemas.article import ArticleCreate, ArticleUpdate, ArticleResponse, ArticleListResponse
 from app.schemas.common import success_response, error_response
@@ -425,6 +426,21 @@ async def toggle_like(
             article_likes.insert().values(user_id=current_user.id, article_id=article_id)
         )
         liked = True
+
+    if liked:
+        article_result = await db.execute(
+            select(Article).where(Article.id == article_id)
+        )
+        article_obj = article_result.scalar_one()
+        if article_obj.author_id != current_user.id:
+            notification = Notification(
+                user_id=article_obj.author_id,
+                type=NotificationType.like,
+                title="新的赞",
+                content=f"{current_user.username} 赞了你的文章《{article_obj.title}》",
+                link=f"/article/{article_id}",
+            )
+            db.add(notification)
 
     await db.flush()
     count = await _get_like_count(article_id, db)

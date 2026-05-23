@@ -7,6 +7,7 @@ from app.database import get_db
 from app.models.user import User, UserRole
 from app.models.article import Article
 from app.models.comment import Comment
+from app.models.notification import Notification, NotificationType
 from app.schemas.comment import CommentCreate, CommentUpdate, CommentResponse
 from app.schemas.common import success_response, error_response
 from app.api.deps import get_current_user
@@ -110,6 +111,38 @@ async def create_comment(
     db.add(comment)
     await db.flush()
     await db.refresh(comment)
+
+    # 通知文章作者
+    article_result = await db.execute(
+        select(Article).where(Article.id == article_id)
+    )
+    article_obj = article_result.scalar_one()
+
+    if article_obj.author_id != current_user.id:
+        notification = Notification(
+            user_id=article_obj.author_id,
+            type=NotificationType.comment,
+            title="新评论",
+            content=f"{current_user.username} 评论了你的文章《{article_obj.title}》",
+            link=f"/article/{article_id}",
+        )
+        db.add(notification)
+
+    # 如果是回复，通知父评论作者
+    if req.parent_id:
+        parent_result = await db.execute(
+            select(Comment).where(Comment.id == req.parent_id)
+        )
+        parent_comment = parent_result.scalar_one()
+        if parent_comment.user_id != current_user.id:
+            reply_notification = Notification(
+                user_id=parent_comment.user_id,
+                type=NotificationType.reply,
+                title="新回复",
+                content=f"{current_user.username} 回复了你的评论",
+                link=f"/article/{article_id}",
+            )
+            db.add(reply_notification)
 
     stmt = (
         select(Comment)
