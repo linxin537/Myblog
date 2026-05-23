@@ -36,7 +36,16 @@
       "Bash(\"C:\\\\ProgramData\\\\anaconda3\\\\python.exe\" -m uvicorn app.main:app --host 127.0.0.1 --port 8003)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(Select-Object -First 20)",
+      "Bash(Get-ChildItem *)",
+      "Bash(Select-Object Mode, Name)",
+      "Bash(Get-Content app\\\\api\\\\v1\\\\comments.py)",
+      "PowerShell(taskkill *)",
+      "Bash(git commit *)",
+      "PowerShell(gh auth *)",
+      "Bash(git remote *)",
+      "Bash(git push *)"
     ]
   }
 }
