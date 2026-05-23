@@ -3,14 +3,12 @@ import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   NInput, NSelect, NButton, NSpace, NSpin, NText,
-  NSwitch, NModal, useMessage, useDialog,
+  NSwitch, useMessage, useDialog,
 } from 'naive-ui'
 import MarkdownEditor from '../components/MarkdownEditor.vue'
-import ImageUpload from '../components/ImageUpload.vue'
 import { getArticle, createArticle, updateArticle } from '../api/articles'
 import { getCategories } from '../api/categories'
 import { getTags, createTag } from '../api/tags'
-import { uploadFile } from '../api/files'
 import { useDraftSave } from '../composables/useDraftSave'
 import type { ArticleDetail, CategoryInfo, TagInfo } from '../types/api'
 
@@ -26,7 +24,6 @@ const isEditing = !!articleId
 const title = ref('')
 const content = ref('')
 const summary = ref('')
-const coverImage = ref('')
 const categoryId = ref<number | null>(null)
 const tagIds = ref<number[]>([])
 const isDraft = ref(true)
@@ -36,7 +33,6 @@ const categories = ref<CategoryInfo[]>([])
 const tags = ref<TagInfo[]>([])
 const loading = ref(false)
 const saving = ref(false)
-const showImageUpload = ref(false)
 const lastSaved = ref('')
 
 async function loadCategoriesAndTags() {
@@ -55,7 +51,6 @@ async function loadArticle() {
       title.value = a.title
       content.value = a.content
       summary.value = a.summary || ''
-      coverImage.value = a.cover_image || ''
       categoryId.value = a.category?.id ?? null
       tagIds.value = a.tags?.map((t: TagInfo) => t.id) || []
       isDraft.value = a.is_draft
@@ -71,7 +66,6 @@ function getDraftData() {
     title: title.value,
     content: content.value,
     summary: summary.value,
-    cover_image: coverImage.value,
     category_id: categoryId.value,
     tag_ids: tagIds.value,
     is_draft: isDraft.value,
@@ -84,7 +78,7 @@ onBeforeUnmount(() => {
 })
 
 // 自动保存
-watch([title, content, summary, coverImage, categoryId, tagIds, isDraft, isPinned], () => {
+watch([title, content, summary, categoryId, tagIds, isDraft, isPinned], () => {
   if (title.value || content.value) {
     lastSaved.value = '保存中...'
     saveDraft(getDraftData(), () => {
@@ -108,7 +102,6 @@ function checkAndRestoreDraft() {
       title.value = draft.title
       content.value = draft.content
       summary.value = draft.summary
-      coverImage.value = draft.cover_image
       categoryId.value = draft.category_id
       tagIds.value = draft.tag_ids
       isDraft.value = draft.is_draft
@@ -125,7 +118,6 @@ async function handleSave(publish: boolean) {
       title: title.value,
       content: content.value,
       summary: summary.value || null,
-      cover_image: coverImage.value || null,
       category_id: categoryId.value,
       tag_ids: tagIds.value,
       is_draft: !publish,
@@ -169,19 +161,6 @@ async function handleCreateTag(name: string) {
   return null
 }
 
-async function handleImageUpload(file: File) {
-  const { data } = await uploadFile(file)
-  if (data.code === 0 && data.data) {
-    return { url: `/static/uploads/${data.data.path.split('static/uploads/')[1] || data.data.path}` }
-  }
-  throw new Error('上传失败')
-}
-
-function insertCoverImage(url: string) {
-  coverImage.value = url
-  showImageUpload.value = false
-}
-
 onMounted(async () => {
   await loadCategoriesAndTags()
   if (isEditing) {
@@ -221,7 +200,7 @@ onMounted(async () => {
       <!-- 内容 -->
       <div :style="{ marginBottom: '20px' }">
         <div :style="{ fontSize: '13px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '6px' }">内容</div>
-        <MarkdownEditor v-model="content" :upload-fn="handleImageUpload" />
+        <MarkdownEditor v-model="content" />
       </div>
 
       <!-- 分类 + 标签（并排） -->
@@ -249,18 +228,6 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- 封面图 -->
-      <div :style="{ marginBottom: '20px' }">
-        <div :style="{ fontSize: '13px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '6px' }">封面图</div>
-        <div v-if="coverImage" style="margin-bottom: 8px;">
-          <img :src="coverImage" style="max-width: 300px; border-radius: 8px; max-height: 150px; object-fit: cover;" alt="" />
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <NInput v-model:value="coverImage" placeholder="封面图 URL" :style="{ flex: 1, '--n-border-radius': '8px' }" />
-          <NButton size="small" secondary @click="showImageUpload = true">上传图片</NButton>
-        </div>
-      </div>
-
       <!-- 选项栏：置顶 / 草稿切换 / 保存状态 / 返回 -->
       <div :style="{
         display: 'flex',
@@ -268,7 +235,7 @@ onMounted(async () => {
         marginBottom: '32px',
         alignItems: 'center',
         padding: '14px 20px',
-        background: 'var(--color-bg-secondary)',
+        background: 'var(--color-surface-soft)',
         borderRadius: '8px',
       }">
         <NSpace align="center">
@@ -296,6 +263,7 @@ onMounted(async () => {
         </NButton>
         <NButton
           type="primary"
+          class="publish-btn"
           :loading="saving"
           @click="handleSave(true)"
           :disabled="!title"
@@ -306,11 +274,16 @@ onMounted(async () => {
       </div>
     </NSpin>
 
-    <!-- 图片上传弹窗 -->
-    <NModal v-model:show="showImageUpload" title="上传图片">
-      <div :style="{ padding: '24px', width: '500px', maxWidth: '90vw', background: 'var(--color-bg)', borderRadius: '12px' }">
-        <ImageUpload @uploaded="insertCoverImage" />
-      </div>
-    </NModal>
   </div>
 </template>
+
+<style scoped>
+@keyframes publish-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 56, 92, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(255, 56, 92, 0); }
+}
+
+.publish-btn {
+  animation: publish-pulse 2s ease infinite;
+}
+</style>

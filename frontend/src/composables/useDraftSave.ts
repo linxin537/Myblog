@@ -5,7 +5,6 @@ export interface DraftData {
   title: string
   content: string
   summary: string
-  cover_image: string
   category_id: number | null
   tag_ids: number[]
   is_draft: boolean
