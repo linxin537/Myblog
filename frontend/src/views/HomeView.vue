@@ -12,6 +12,7 @@ import { getCategories } from '../api/categories'
 import { getTags } from '../api/tags'
 import type { ArticleInfo, CategoryInfo, TagInfo } from '../types/api'
 import gsap from 'gsap'
+import { useParallax } from '../composables/useParallax'
 
 const router = useRouter()
 const route = useRoute()
@@ -89,6 +90,12 @@ onMounted(() => {
     tl.fromTo('.hero-search', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' }, '-=0.1')
   })
 
+  // Parallax decorations
+  useParallax([
+    { el: '.hero-parallax-1', speed: 0.3 },
+    { el: '.hero-parallax-2', speed: 0.5 },
+  ])
+
   if (route.query.tag_id) {
     selectedTag.value = Number(route.query.tag_id)
   }
@@ -135,7 +142,30 @@ function handleCardMouseLeave(e: MouseEvent) {
 
 <template>
     <!-- Hero -->
-    <div :style="{ textAlign: 'center', padding: '80px 32px 64px' }">
+    <div :style="{ textAlign: 'center', padding: '80px 32px 64px', position: 'relative', overflow: 'hidden' }">
+      <!-- Parallax decoration circles -->
+      <div class="hero-parallax-1" :style="{
+        position: 'absolute',
+        width: '200px',
+        height: '200px',
+        borderRadius: '50%',
+        border: '1px solid var(--color-primary)',
+        opacity: 0.08,
+        top: '-80px',
+        right: '10%',
+        pointerEvents: 'none',
+      }" />
+      <div class="hero-parallax-2" :style="{
+        position: 'absolute',
+        width: '120px',
+        height: '120px',
+        borderRadius: '50%',
+        background: 'var(--color-primary)',
+        opacity: 0.04,
+        bottom: '-40px',
+        left: '5%',
+        pointerEvents: 'none',
+      }" />
       <h1 class="hero-title" :style="{
         fontSize: '28px',
         fontWeight: 700,
