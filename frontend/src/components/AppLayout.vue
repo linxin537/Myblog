@@ -4,11 +4,27 @@ import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { Moon, Sunny } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
+import { onMounted, ref } from 'vue'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const dark = defineModel<boolean>('dark', { default: false })
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
+
+const headerScrolled = ref(false)
+
+onMounted(() => {
+  ScrollTrigger.create({
+    start: 'top -50',
+    end: 'max',
+    onEnter: () => { headerScrolled.value = true },
+    onLeaveBack: () => { headerScrolled.value = false },
+  })
+})
 
 const adminOptions = [
   { label: '分类管理', key: 'categories' },
@@ -43,21 +59,26 @@ function isActive(path: string) {
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        height: '80px',
-        background: 'var(--color-canvas)',
+        height: headerScrolled ? '56px' : '80px',
+        background: headerScrolled
+          ? 'color-mix(in srgb, var(--color-canvas) 85%, transparent)'
+          : 'var(--color-canvas)',
         borderBottom: '1px solid var(--color-hairline-soft)',
-        transition: 'background 0.3s ease, border-color 0.3s ease',
+        transition: 'height 0.3s ease, background 0.3s ease',
+        backdropFilter: headerScrolled ? 'blur(12px)' : 'none',
+        WebkitBackdropFilter: headerScrolled ? 'blur(12px)' : 'none',
       }"
     >
       <!-- Logo -->
       <NText
         strong
         :style="{
-          fontSize: '20px',
+          fontSize: headerScrolled ? '18px' : '20px',
           cursor: 'pointer',
           fontWeight: 700,
           color: 'var(--color-primary)',
           letterSpacing: '-0.3px',
+          transition: 'font-size 0.3s ease',
         }"
         @click="router.push('/')"
       >
@@ -66,76 +87,41 @@ function isActive(path: string) {
 
       <!-- Center Nav -->
       <NSpace align="center" :size="32">
-        <NButton
-          text
-          :style="{
-            fontSize: '14px',
-            fontWeight: 600,
-            color: isActive('/') && route.path === '/' ? 'var(--color-ink)' : 'var(--color-muted)',
-            borderBottom: isActive('/') && route.path === '/' ? '2px solid var(--color-ink)' : '2px solid transparent',
-            borderRadius: '0',
-            paddingBottom: '4px',
-            height: 'auto',
-          }"
+        <div
+          class="nav-item"
+          :class="{ active: isActive('/') && route.path === '/' }"
           @click="router.push('/')"
         >
           首页
-        </NButton>
-        <NButton
+        </div>
+        <div
           v-if="auth.isAuthor"
-          text
-          :style="{
-            fontSize: '14px',
-            fontWeight: 600,
-            color: isActive('/editor') ? 'var(--color-ink)' : 'var(--color-muted)',
-            borderBottom: isActive('/editor') ? '2px solid var(--color-ink)' : '2px solid transparent',
-            borderRadius: '0',
-            paddingBottom: '4px',
-            height: 'auto',
-          }"
+          class="nav-item"
+          :class="{ active: isActive('/editor') }"
           @click="router.push('/editor')"
         >
           创作
-        </NButton>
-        <NButton
+        </div>
+        <div
           v-if="auth.isAuthor"
-          text
-          :style="{
-            fontSize: '14px',
-            fontWeight: 600,
-            color: isActive('/drafts') ? 'var(--color-ink)' : 'var(--color-muted)',
-            borderBottom: isActive('/drafts') ? '2px solid var(--color-ink)' : '2px solid transparent',
-            borderRadius: '0',
-            paddingBottom: '4px',
-            height: 'auto',
-          }"
+          class="nav-item"
+          :class="{ active: isActive('/drafts') }"
           @click="router.push('/drafts')"
         >
           草稿
-        </NButton>
-        <NButton
+        </div>
+        <div
           v-if="auth.isLoggedIn"
-          text
-          :style="{
-            fontSize: '14px',
-            fontWeight: 600,
-            color: isActive('/favorites') ? 'var(--color-ink)' : 'var(--color-muted)',
-            borderBottom: isActive('/favorites') ? '2px solid var(--color-ink)' : '2px solid transparent',
-            borderRadius: '0',
-            paddingBottom: '4px',
-            height: 'auto',
-          }"
+          class="nav-item"
+          :class="{ active: isActive('/favorites') }"
           @click="router.push('/favorites')"
         >
           收藏
-        </NButton>
+        </div>
         <NDropdown v-if="auth.isAdmin" :options="adminOptions" @select="handleAdminSelect">
-          <NButton
-            text
-            :style="{ fontSize: '14px', fontWeight: 600, color: 'var(--color-muted)', height: 'auto' }"
-          >
+          <div class="nav-item">
             管理
-          </NButton>
+          </div>
         </NDropdown>
       </NSpace>
 
@@ -183,3 +169,26 @@ function isActive(path: string) {
     </NLayoutContent>
   </NLayout>
 </template>
+
+<style scoped>
+.nav-item {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  padding: 0 0 4px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+  line-height: 1.4;
+}
+
+.nav-item:hover {
+  color: var(--color-ink);
+}
+
+.nav-item.active {
+  color: var(--color-ink);
+  border-bottom-color: var(--color-ink);
+}
+</style>
