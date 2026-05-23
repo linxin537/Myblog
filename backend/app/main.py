@@ -7,6 +7,7 @@ from app.config import get_settings
 from app.database import engine, Base
 from app.models import User  # noqa: F401
 from app.models.notification import Notification  # noqa: F401
+from app.models.password_reset import PasswordResetToken  # noqa: F401
 from app.api.v1.auth import router as auth_router
 from app.api.v1.users import router as users_router
 from app.api.v1.categories import router as categories_router

@@ -1,15 +1,18 @@
-from datetime import datetime
+import hashlib
+import os
+from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, Response, Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.user import User, UserRole
+from app.models.password_reset import PasswordResetToken
 from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, RefreshRequest, UserResponse
 from app.schemas.common import ApiResponse, success_response, error_response
-from app.schemas.password import ChangePasswordRequest
+from app.schemas.password import ChangePasswordRequest, ForgotPasswordRequest, ResetPasswordRequest
 from app.services import log_action
 from app.core.security import (
-    hash_password, verify_password, create_access_token, create_refresh_token,
+    _utcnow, hash_password, verify_password, create_access_token, create_refresh_token,
     decode_token, is_locked, record_login_failure, reset_login_attempts,
 )
 from app.core.errors import (
@@ -136,3 +139,67 @@ async def change_password(
                      target_type="user", target_id=current_user.id, request=request)
 
     return success_response(message="密码修改成功")
+
+
+@router.post("/forgot-password")
+async def forgot_password(
+    req: ForgotPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(User).where(User.email == req.email, User.deleted_at.is_(None))
+    )
+    user = result.scalar_one_or_none()
+
+    if user:
+        token = hashlib.sha256(os.urandom(32)).hexdigest()
+        expires_at = _utcnow() + timedelta(hours=24)
+        reset_token = PasswordResetToken(
+            user_id=user.id,
+            token=token,
+            expires_at=expires_at,
+        )
+        db.add(reset_token)
+        await db.flush()
+
+        # Dev mode: print reset link to console
+        reset_url = f"http://localhost:5173/reset-password?token={token}"
+        print(f"\n{'='*60}")
+        print(f"密码重置链接 (dev): {reset_url}")
+        print(f"{'='*60}\n")
+
+    # Always return success to prevent user enumeration
+    return success_response(message="如果邮箱已注册，重置链接已发送")
+
+
+@router.post("/reset-password")
+async def reset_password(
+    req: ResetPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    now = _utcnow()
+    result = await db.execute(
+        select(PasswordResetToken).where(
+            PasswordResetToken.token == req.token,
+            PasswordResetToken.used == False,
+            PasswordResetToken.expires_at > now,
+        )
+    )
+    reset_token = result.scalar_one_or_none()
+
+    if not reset_token:
+        return error_response(1021, "无效或过期的重置令牌")
+
+    result = await db.execute(
+        select(User).where(User.id == reset_token.user_id)
+    )
+    user = result.scalar_one_or_none()
+
+    if not user:
+        return error_response(1021, "无效或过期的重置令牌")
+
+    user.hashed_password = hash_password(req.new_password)
+    reset_token.used = True
+    await db.flush()
+
+    return success_response(message="密码已重置")

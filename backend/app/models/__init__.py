@@ -6,5 +6,6 @@ from app.models.file import File
 from app.models.comment import Comment
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification
+from app.models.password_reset import PasswordResetToken
 
-__all__ = ["User", "Category", "Tag", "Article", "article_tags", "article_likes", "article_favorites", "File", "Comment", "AuditLog", "Notification"]
+__all__ = ["User", "Category", "Tag", "Article", "article_tags", "article_likes", "article_favorites", "File", "Comment", "AuditLog", "Notification", "PasswordResetToken"]
