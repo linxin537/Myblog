@@ -195,88 +195,122 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div style="max-width: 1000px; margin: 0 auto; padding-top: 24px;">
+  <div style="max-width: 1000px; margin: 0 auto; padding: 32px 24px;">
     <NSpin :show="loading">
-      <!-- 工具栏 -->
-      <div class="glass" style="padding: 12px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
-        <NButton text @click="router.back()">← 返回</NButton>
-        <div style="flex: 1;" />
-        <NText v-if="lastSaved" depth="3" style="font-size: 12px;">{{ lastSaved }}</NText>
-        <NSwitch v-model:value="isDraft" checked-text="草稿" unchecked-text="发布" />
-        <NButton secondary :loading="saving" @click="handleSave(true)" :disabled="!title">
-          {{ isDraft ? '发布' : '更新' }}
-        </NButton>
-        <NButton type="primary" :loading="saving" @click="handleSave(false)" :disabled="!title">
-          保存草稿
-        </NButton>
+      <!-- 标题 -->
+      <div :style="{ marginBottom: '20px' }">
+        <div :style="{ fontSize: '13px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '6px' }">标题</div>
+        <NInput
+          v-model:value="title"
+          placeholder="输入文章标题..."
+          size="large"
+          :style="{ '--n-border-radius': '8px' }"
+        />
       </div>
 
-      <div style="display: flex; gap: 20px; align-items: flex-start;">
-        <!-- 元数据面板 -->
-        <div class="glass" style="width: 280px; flex-shrink: 0; padding: 20px;">
-          <div style="margin-bottom: 16px;">
-            <NText strong style="display: block; margin-bottom: 4px;">分类</NText>
-            <NSelect
-              v-model:value="categoryId"
-              :options="categories.map(c => ({ label: c.name, value: c.id }))"
-              placeholder="选择分类"
-              clearable
-            />
-          </div>
+      <!-- 摘要 -->
+      <div :style="{ marginBottom: '20px' }">
+        <div :style="{ fontSize: '13px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '6px' }">摘要</div>
+        <NInput
+          v-model:value="summary"
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          placeholder="写一段简短的摘要..."
+          :style="{ '--n-border-radius': '8px' }"
+        />
+      </div>
 
-          <div style="margin-bottom: 16px;">
-            <NText strong style="display: block; margin-bottom: 4px;">标签</NText>
-            <NSelect
-              v-model:value="tagIds"
-              :options="tags.map(t => ({ label: t.name, value: t.id }))"
-              placeholder="选择标签"
-              multiple
-              tag
-              filterable
-              @create="(l: string) => handleCreateTag(l)"
-            />
-          </div>
+      <!-- 内容 -->
+      <div :style="{ marginBottom: '20px' }">
+        <div :style="{ fontSize: '13px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '6px' }">内容</div>
+        <MarkdownEditor v-model="content" :upload-fn="handleImageUpload" />
+      </div>
 
-          <div style="margin-bottom: 16px;">
-            <NText strong style="display: block; margin-bottom: 4px;">摘要</NText>
-            <NInput v-model:value="summary" type="textarea" :autosize="{ minRows: 3 }" placeholder="文章摘要..." />
-          </div>
-
-          <div style="margin-bottom: 16px;">
-            <NText strong style="display: block; margin-bottom: 4px;">封面图</NText>
-            <div v-if="coverImage" style="margin-bottom: 8px;">
-              <img :src="coverImage" style="width: 100%; border-radius: 8px; max-height: 150px; object-fit: cover;" alt="" />
-            </div>
-            <NInput v-model:value="coverImage" placeholder="封面图 URL" />
-            <NButton size="small" quaternary style="margin-top: 4px;" @click="showImageUpload = true">
-              上传图片
-            </NButton>
-          </div>
-
-          <div style="margin-bottom: 16px;">
-            <NSpace align="center">
-              <NSwitch v-model:value="isPinned" />
-              <NText>置顶文章</NText>
-            </NSpace>
-          </div>
-        </div>
-
-        <!-- 编辑器主体 -->
-        <div style="flex: 1; min-width: 0;">
-          <NInput
-            v-model:value="title"
-            placeholder="文章标题..."
-            size="large"
-            style="margin-bottom: 16px; font-size: 24px; font-weight: 700;"
+      <!-- 分类 + 标签（并排） -->
+      <div :style="{ display: 'flex', gap: '20px', marginBottom: '20px', flexWrap: 'wrap' }">
+        <div :style="{ flex: '1 1 200px' }">
+          <div :style="{ fontSize: '13px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '6px' }">分类</div>
+          <NSelect
+            v-model:value="categoryId"
+            :options="categories.map(c => ({ label: c.name, value: c.id }))"
+            placeholder="选择分类"
+            clearable
           />
-          <MarkdownEditor v-model="content" :upload-fn="handleImageUpload" />
         </div>
+        <div :style="{ flex: '1 1 200px' }">
+          <div :style="{ fontSize: '13px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '6px' }">标签</div>
+          <NSelect
+            v-model:value="tagIds"
+            :options="tags.map(t => ({ label: t.name, value: t.id }))"
+            placeholder="选择标签"
+            multiple
+            tag
+            filterable
+            @create="(l: string) => handleCreateTag(l)"
+          />
+        </div>
+      </div>
+
+      <!-- 封面图 -->
+      <div :style="{ marginBottom: '20px' }">
+        <div :style="{ fontSize: '13px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '6px' }">封面图</div>
+        <div v-if="coverImage" style="margin-bottom: 8px;">
+          <img :src="coverImage" style="max-width: 300px; border-radius: 8px; max-height: 150px; object-fit: cover;" alt="" />
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <NInput v-model:value="coverImage" placeholder="封面图 URL" :style="{ flex: 1, '--n-border-radius': '8px' }" />
+          <NButton size="small" secondary @click="showImageUpload = true">上传图片</NButton>
+        </div>
+      </div>
+
+      <!-- 选项栏：置顶 / 草稿切换 / 保存状态 / 返回 -->
+      <div :style="{
+        display: 'flex',
+        gap: '16px',
+        marginBottom: '32px',
+        alignItems: 'center',
+        padding: '14px 20px',
+        background: 'var(--color-bg-secondary)',
+        borderRadius: '8px',
+      }">
+        <NSpace align="center">
+          <NSwitch v-model:value="isPinned" />
+          <NText>置顶文章</NText>
+        </NSpace>
+        <NSpace align="center">
+          <NSwitch v-model:value="isDraft" checked-text="草稿" unchecked-text="发布" />
+        </NSpace>
+        <div style="flex: 1;" />
+        <NText v-if="lastSaved" depth="3" style="font-size: 12px;">{{ lastSaved }}</NText>
+        <NButton text @click="router.back()">← 返回</NButton>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div :style="{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }">
+        <NButton
+          secondary
+          :loading="saving"
+          @click="handleSave(false)"
+          :disabled="!title"
+          :style="{ borderRadius: '8px' }"
+        >
+          保存草稿
+        </NButton>
+        <NButton
+          type="primary"
+          :loading="saving"
+          @click="handleSave(true)"
+          :disabled="!title"
+          :style="{ borderRadius: '8px' }"
+        >
+          {{ isDraft ? '发布' : '更新' }}
+        </NButton>
       </div>
     </NSpin>
 
     <!-- 图片上传弹窗 -->
     <NModal v-model:show="showImageUpload" title="上传图片">
-      <div class="glass" style="padding: 24px; width: 500px; max-width: 90vw;">
+      <div :style="{ padding: '24px', width: '500px', maxWidth: '90vw', background: 'var(--color-bg)', borderRadius: '12px' }">
         <ImageUpload @uploaded="insertCoverImage" />
       </div>
     </NModal>
