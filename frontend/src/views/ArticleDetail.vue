@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
+import { useHead } from '@unhead/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { NButton, NTag, NSpace, NSpin, NResult, NPopconfirm, useMessage } from 'naive-ui'
 import { marked } from 'marked'
@@ -45,6 +46,17 @@ const auth = useAuthStore()
 
 const article = ref<ArticleDetailType | null>(null)
 const loading = ref(true)
+
+useHead({
+  title: () => article.value?.title || '文章详情',
+  meta: [
+    { name: 'description', content: () => article.value?.summary || article.value?.content?.slice(0, 200) || '' },
+    { property: 'og:title', content: () => article.value?.title || '' },
+    { property: 'og:description', content: () => article.value?.summary || '' },
+    { property: 'og:type', content: 'article' },
+    { name: 'twitter:card', content: 'summary' },
+  ],
+})
 const likeCount = ref(0)
 const isLiked = ref(false)
 const favoriteCount = ref(0)

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useHead } from '@unhead/vue'
 import { useRouter, useRoute } from 'vue-router'
 import { NInput, NSelect, NPagination, NButton, NSpin, NEmpty, NSpace } from 'naive-ui'
 import { Search } from '@vicons/ionicons5'
@@ -17,6 +18,14 @@ import { useParallax } from '../composables/useParallax'
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
+
+useHead({
+  title: '个人博客',
+  meta: [
+    { name: 'description', content: '个人日常记录与博客平台' },
+    { property: 'og:title', content: '个人博客' },
+  ],
+})
 
 const articles = ref<ArticleInfo[]>([])
 const categories = ref<CategoryInfo[]>([])

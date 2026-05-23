@@ -14,6 +14,7 @@
     "@bytemd/plugin-highlight": "^1.22.0",
     "@bytemd/plugin-medium-zoom": "^1.22.0",
     "@bytemd/vue-next": "^1.22.0",
+    "@unhead/vue": "^3.1.0",
     "@vicons/ionicons5": "^0.13.0",
     "axios": "^1.16.1",
     "bytemd": "^1.22.0",

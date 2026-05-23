@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
+import { useHead } from '@unhead/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { NButton, NText, NSpace, NTag, NSpin, NResult, NPagination, NEmpty } from 'naive-ui'
 import client from '../api/client'
@@ -10,6 +11,13 @@ import gsap from 'gsap'
 
 const route = useRoute()
 const router = useRouter()
+
+useHead({
+  title: () => `${route.params.username} 的个人主页`,
+  meta: [
+    { name: 'description', content: () => `${route.params.username} 的个人主页` },
+  ],
+})
 
 interface ProfileData extends UserInfo {
   article_count: number
