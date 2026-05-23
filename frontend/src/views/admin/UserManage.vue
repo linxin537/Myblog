@@ -16,7 +16,7 @@ const users = ref<UserManageInfo[]>([])
 const loading = ref(false)
 const page = ref(1)
 const total = ref(0)
-const pageSize = 10
+let pageSize = 10
 const search = ref('')
 const roleFilter = ref<string | null>(null)
 

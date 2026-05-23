@@ -8,7 +8,7 @@ const logs = ref<AuditLogInfo[]>([])
 const loading = ref(false)
 const page = ref(1)
 const total = ref(0)
-const pageSize = 20
+let pageSize = 20
 const actionFilter = ref<string | null>(null)
 
 const actionOptions = [

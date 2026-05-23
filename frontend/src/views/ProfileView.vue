@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { NButton, NText, NSpace, NTag, NSpin, NResult, NPagination, NEmpty } from 'naive-ui'
 import client from '../api/client'
 import ArticleCard from '../components/ArticleCard.vue'
-import type { UserInfo, ArticleInfo, ApiResponse, PaginatedResponse } from '../types/api'
+import type { UserInfo, ArticleInfo, ApiResponse } from '../types/api'
 import { getIdenticonUrl } from '../utils/identicon'
 
 const route = useRoute()
