@@ -14,6 +14,7 @@ from app.api.v1.articles import router as articles_router
 from app.api.v1.files import router as files_router
 from app.api.v1.comments import router as comments_router
 from app.api.v1.admin import router as admin_router
+from app.api.v1.rss import router as rss_router
 from app.core.errors import AppError
 from app.core.middleware import RateLimitMiddleware
 from app.schemas.common import error_response
@@ -59,6 +60,7 @@ app.include_router(articles_router, prefix="/api/v1")
 app.include_router(files_router, prefix="/api/v1")
 app.include_router(comments_router, prefix="/api/v1")
 app.include_router(admin_router, prefix="/api/v1")
+app.include_router(rss_router, prefix="/api/v1")
 
 
 @app.exception_handler(AppError)
