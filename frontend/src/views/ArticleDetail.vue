@@ -15,6 +15,7 @@ import TableOfContents from '../components/TableOfContents.vue'
 import type { ArticleDetail as ArticleDetailType } from '../types/api'
 import { getIdenticonUrl } from '../utils/identicon'
 import { formatReadingTime } from '../composables/useReadingTime'
+import { useCodeHighlight } from '../composables/useCodeHighlight'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -43,6 +44,7 @@ const route = useRoute()
 const router = useRouter()
 const message = useMessage()
 const auth = useAuthStore()
+const { copyCodeBlock } = useCodeHighlight()
 
 const article = ref<ArticleDetailType | null>(null)
 const loading = ref(true)
@@ -90,6 +92,21 @@ function renderMarkdown(content: string) {
   return DOMPurify.sanitize(raw)
 }
 
+function attachCopyButtons() {
+  document.querySelectorAll('.article-content pre').forEach((pre) => {
+    if (pre.querySelector('.copy-btn')) return
+    const btn = document.createElement('button')
+    btn.className = 'copy-btn'
+    btn.textContent = '复制'
+    btn.onclick = () => {
+      copyCodeBlock(pre as HTMLElement)
+      btn.textContent = '已复制'
+      setTimeout(() => { btn.textContent = '复制' }, 1500)
+    }
+    pre.appendChild(btn)
+  })
+}
+
 async function loadArticle() {
   loading.value = true
   try {
@@ -103,6 +120,7 @@ async function loadArticle() {
       favoriteCount.value = data.data.favorite_count
       tocHeadings.value = extractHeadings(data.data.content)
       await nextTick()
+      attachCopyButtons()
     }
   } finally {
     loading.value = false
@@ -335,7 +353,7 @@ watch(() => route.params.id, () => {
 .article-content h3 { font-size: 20px; font-weight: 600; margin: 20px 0 10px; }
 .article-content p { margin-bottom: 18px; line-height: 1.8; }
 .article-content img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
-.article-content pre { background: var(--color-surface-soft); border: 1px solid var(--color-hairline-soft); border-radius: 10px; padding: 20px; overflow-x: auto; margin: 20px 0; }
+.article-content pre { position: relative; background: var(--color-surface-soft); border: 1px solid var(--color-hairline-soft); border-radius: 10px; padding: 20px; overflow-x: auto; margin: 20px 0; }
 .article-content code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 14px; }
 .article-content blockquote { border-left: 3px solid var(--color-primary); padding-left: 18px; margin: 20px 0; color: var(--color-body); font-style: italic; }
 .article-content table { width: 100%; border-collapse: collapse; margin: 20px 0; }
@@ -346,5 +364,23 @@ watch(() => route.params.id, () => {
 @keyframes like-particle {
   0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
   100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+}
+
+.article-content .copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  background: rgba(128, 128, 128, 0.2);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.article-content pre:hover .copy-btn {
+  opacity: 1;
 }
 </style>
