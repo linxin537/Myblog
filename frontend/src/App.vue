@@ -5,6 +5,7 @@ import gsap from 'gsap'
 import { useRoute } from 'vue-router'
 import AppLayout from './components/AppLayout.vue'
 import DynamicCursor from './components/DynamicCursor.vue'
+import FloatingLines from './components/FloatingLines.vue'
 
 const THEME_KEY = 'blog-theme'
 
@@ -101,6 +102,17 @@ const darkThemeOverrides: GlobalThemeOverrides = {
   <NConfigProvider :theme="isDark ? darkTheme : undefined" :theme-overrides="isDark ? darkThemeOverrides : lightThemeOverrides">
     <NMessageProvider>
       <NDialogProvider>
+        <FloatingLines
+          :lines-gradient="['#E947F5', '#2F4BA2']"
+          :enabled-waves="['top', 'middle', 'bottom']"
+          :line-count="[10, 15, 20]"
+          :line-distance="[8, 6, 4]"
+          :bend-radius="5"
+          :bend-strength="-0.5"
+          :interactive="true"
+          :parallax="true"
+          :animation-speed="0.6"
+        />
         <DynamicCursor />
         <AppLayout v-model:dark="isDark">
           <RouterView v-slot="{ Component, route: r }">
