@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<{
   mouseDamping?: number
   parallax?: boolean
   parallaxStrength?: number
-  mixBlendMode?: string
+  mixBlendMode?: 'screen' | 'multiply' | 'overlay' | 'darken' | 'lighten' | 'color-dodge' | 'color-burn' | 'hard-light' | 'soft-light' | 'difference' | 'exclusion' | 'hue' | 'saturation' | 'color' | 'luminosity' | 'normal'
 }>(), {
   linesGradient: () => [],
   enabledWaves: () => ['top', 'middle', 'bottom'],
